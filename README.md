@@ -1,24 +1,37 @@
-# Next.js & NextUI Template
+# Twiggle
 
-This is a template for creating applications using Next.js 13 (pages directory) and NextUI (v2).
+Twiggle is a web application that allows users to create a personalized landing page with multiple links, making it easy for them to share their online presence in one place.
 
-## Technologies Used
+## Table of Contents
 
-- [Next.js 13](https://nextjs.org/docs/getting-started)
-- [NextUI](https://nextui.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+- [Features](#features)
+- [Usage](#usage)
+- [License](#license)
 
-## How to Use
+## Features
 
-To create a new project based on this template using `create-next-app`, run the following command:
+- **Link Management:**
+  - Create, edit, and delete links to showcase your online content.
 
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-pages-template
-```
+- **Page Customization:**
+  - Personalize your Twiggle page with themes, colors, and other customization options.
+
+- **Analytics:**
+  - Track link clicks and user engagement with basic analytics.
+
+- **User Authentication:**
+  - Securely sign up and log in to manage your Twiggle page.
+
+- **Additional Pages:**
+  - Explore additional pages such as Home, Contact, About, FAQ, and Support.
+
+## Usage
+
+1. Navigate to the homepage.
+2. Sign up or log in to create your Twiggle page.
+3. Customize your page, add links, and explore additional features.
+4. Share your Twiggle page link to showcase your online presence.
+
 ## License
 
-Licensed under the [MIT license](https://github.com/nextui-org/next-pages-template/blob/main/LICENSE).
+This project is licensed under the [MIT License](LICENSE).
