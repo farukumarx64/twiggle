@@ -81,7 +81,10 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="end">
 			<NavbarItem className="hidden sm:flex gap-2">
-					<Button isDisabled>product loading...</Button>
+					<Button radius="sm" size="lg">Log in</Button>
+				</NavbarItem>
+			<NavbarItem className="hidden sm:flex gap-2">
+					<Button color="secondary" radius="full" size="lg">Sign up free</Button>
 				</NavbarItem>
 				<NavbarItem className="hidden sm:flex gap-2">
 					<ThemeSwitch />
