@@ -81,10 +81,10 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="end">
 			<NavbarItem className="hidden sm:flex gap-2">
-					<Button radius="sm" size="lg">Log in</Button>
+					<Button radius="sm" size="lg"><NextLink href="/login">Log in</NextLink></Button>
 				</NavbarItem>
 			<NavbarItem className="hidden sm:flex gap-2">
-					<Button color="secondary" radius="full" size="lg"><NextLink href="/auth">Sign up free</NextLink></Button>
+					<Button color="secondary" radius="full" size="lg"><NextLink href="/register">Sign up free</NextLink></Button>
 				</NavbarItem>
 				<NavbarItem className="hidden sm:flex gap-2">
 					<ThemeSwitch />
