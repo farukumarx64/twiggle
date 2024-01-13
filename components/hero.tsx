@@ -80,7 +80,7 @@ export default function Hero() {
               placeholder="yourname"
               startContent={
                 <div className="pointer-events-none flex items-center">
-                  <span className="text-base">twgl.link/</span>
+                  <span className="text-base">Twgl.link/</span>
                 </div>
               }
               size="md"
