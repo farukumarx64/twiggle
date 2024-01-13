@@ -11,6 +11,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
+import Image from "next/image";
 import NextLink from "next/link";
 import React from "react";
 
@@ -159,10 +160,11 @@ export default function AuthPage() {
             </div>
           </div>
           <div className="hidden lg:flex">
-            <img
+            <Image
               src={`/twiggle-images/twiggle-tree-${image}.jpg`}
               alt=""
               width={698}
+							height={843}
             />
           </div>
         </section>
