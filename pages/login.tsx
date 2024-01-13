@@ -5,6 +5,7 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import NextLink from "next/link";
 import React from "react";
@@ -17,6 +18,7 @@ export default function LoginPage() {
     email: false,
     password: "",
   });
+  const { theme, setTheme } = useTheme();
 
   const isButtonDisabled = !inputs.email || !inputs.password;
 
@@ -50,10 +52,16 @@ export default function LoginPage() {
       <Head icon="logo-alt" title="Login in or Sign Up | Twiggle" />
       <main className="flex justify-center">
         <section className="flex justify-center items-between w-full h-screen">
-          <div className="w-full box-border px-6 md:max-w-6xl">
-            <div>
+          <div className="w-full box-border px-6 md:max-w-6xl pt-4 md:pt-8 md:pb-3">
+          <div className=" md:p-2 ml-[-15px] md:ml-0 md:w-[220px] w-[120px]">
               <NextLink href="/">
-                <Logo />
+              <Image
+              src={`/images/twiggle-logo-purple${theme === "light" ? "" : "-w"}.png`}
+              width={200}
+              height={50}
+              alt="twiggle logo"
+              className=""
+            />
               </NextLink>
             </div>
             <div className="pt-10">
