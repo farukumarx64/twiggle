@@ -16,6 +16,7 @@ import React from "react";
 
 export default function AuthPage() {
   const [legal, setLegal] = React.useState("");
+  const [image, setImage] = React.useState(Math.ceil(Math.random() * 12));
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const handler = (button: string) => {
@@ -159,11 +160,9 @@ export default function AuthPage() {
           </div>
           <div className="hidden lg:flex">
             <img
-              src={`/twiggle-images/twiggle-tree-${Math.ceil(
-                Math.random() * 12
-              )}.jpg`}
+              src={`/twiggle-images/twiggle-tree-${image}.jpg`}
               alt=""
-							width={698}
+              width={698}
             />
           </div>
         </section>
