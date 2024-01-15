@@ -19,18 +19,11 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  AltLogo,
-} from "@/components/icons";
 
 import { Logo } from "@/components/icons";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import React from "react";
 
 export const Navbar = () => {
   const { theme, setTheme } = useTheme();
@@ -42,7 +35,7 @@ export const Navbar = () => {
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Image
               src={`/images/logo-alt-${
-                theme === "light" ? "black" : "white"
+                theme === "dark" ? "white" : "black"
               }.svg`}
               width={50}
               height={50}
@@ -50,7 +43,9 @@ export const Navbar = () => {
               className="md:hidden"
             />
             <Image
-              src={`/images/twiggle-logo-${theme === "light" ? "black" : "white"}.png`}
+              src={`/images/twiggle-logo-${
+                theme === "dark" ? "white" : "black"
+              }.png`}
               width={200}
               height={50}
               alt="twiggle logo"
@@ -66,12 +61,16 @@ export const Navbar = () => {
       >
         <NavbarItem className="hidden sm:flex gap-2">
           <Button radius="sm" size="lg">
-            <NextLink href="/login">Log in</NextLink>
+            <NextLink href="/login" target="_blank">
+              Log in
+            </NextLink>
           </Button>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
           <Button color="secondary" radius="full" size="lg">
-            <NextLink href="/register">Sign up free</NextLink>
+            <NextLink href="/register" target="_blank">
+              Sign up free
+            </NextLink>
           </Button>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
@@ -81,10 +80,14 @@ export const Navbar = () => {
 
       <NavbarContent className="sm:hidden basis-1 gap-2" justify="end">
         <Button radius="sm" size="lg">
-          <NextLink href="/login">Log in</NextLink>
+          <NextLink href="/login" target="_blank">
+            Log in
+          </NextLink>
         </Button>
         <Button color="secondary" radius="full" size="lg">
-          <NextLink href="/register">Sign up free</NextLink>
+          <NextLink href="/register" target="_blank">
+            Sign up free
+          </NextLink>
         </Button>
         <NavbarMenuToggle />
       </NavbarContent>
