@@ -1,5 +1,5 @@
 import { Divider } from "@nextui-org/react";
-import { AppIcon } from "./icons/Icon";
+import { AppIcon } from "../icons/Icon";
 
 export const Faq = () => {
   return (

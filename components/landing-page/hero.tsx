@@ -2,7 +2,7 @@ import { title, subtitle } from "@/components/primitives";
 import { Button, Input, Image, Divider } from "@nextui-org/react";
 import newsletter from "#/email/newsletter";
 import { useState } from "react";
-import { CheckIcon } from "./icons/CheckIcon";
+import { CheckIcon } from "../icons/CheckIcon";
 
 export default function Hero() {
   const [email, setEmail] = useState("");

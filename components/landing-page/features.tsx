@@ -1,7 +1,7 @@
 import { Divider } from "@nextui-org/react";
 import React from "react";
-import { FeatureIcon } from "./icons/FeatureIcon";
-import { AppIcon } from "./icons/Icon";
+import { FeatureIcon } from "../icons/FeatureIcon";
+import { AppIcon } from "../icons/Icon";
 
 export const Features = () => {
   return (

@@ -49,7 +49,7 @@ export default function LoginPage() {
   const toggleVisibility = () => setIsVisible(!isVisible);
   return (
     <div className="relative flex flex-col h-screen">
-      <Head icon="logo-alt" title="Login in or Sign Up | Twiggle" />
+      <Head icon="logo-alt" title="Log in or Sign Up | Twiggle" />
       <main className="flex justify-center">
         <section className="flex justify-center items-between w-full h-screen">
           <div className="w-full box-border px-6 md:max-w-6xl pt-4 md:pt-8 md:pb-3">

@@ -1,9 +1,9 @@
 import { HoveredText } from "+/hover-text";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
+import { categories } from "@/config/categories";
 import {
   Button,
-  Chip,
   Input,
   Modal,
   ModalBody,
@@ -29,8 +29,11 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
     verifyPassword: "",
   });
   const [legal, setLegal] = React.useState("");
+  const [activeCategory, setActiveCategory] = React.useState("");
+  const [activeSubCategory, setActiveSubCategory] = React.useState("");
   const [userName, setUserName] = React.useState("");
   const [value, setValue] = React.useState("");
+  const [category, setCategory] = React.useState<string | null | undefined>("");
   const [isVerifyPasswordInvalid, setIsVerifyPasswordInvalid] =
     React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
@@ -39,6 +42,7 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const isButtonDisabled = !inputs.email || !inputs.username;
+  const isPersonalInfoButtonDisabled = !userName || !activeCategory;
   const isPasswordDisabled =
     !inputs.password ||
     !inputs.verifyPassword ||
@@ -84,6 +88,15 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
     }));
   };
 
+  const handleActiveCategory = (id: string) => {
+    handleCategoryChange(id);
+    setActiveCategory(id);
+  };
+
+  const handleActiveSubCategory = (id: string) => {
+    setActiveSubCategory(id);
+  };
+
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs((prevInputs) => ({ ...prevInputs, username: e.target.value }));
   };
@@ -113,6 +126,11 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
     setIsVerifyPasswordInvalid(!isMatching);
   };
 
+  const handleCategoryChange = (id: string) => {
+    const button = document.getElementById(id);
+    setCategory(button?.textContent);
+  };
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const handler = (button: string) => {
@@ -121,7 +139,7 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
   };
   return (
     <>
-      <div className="w-full box-border px-6 md:max-w-6xl pt-4 md:pt-8 md:pb-3">
+      <div className="w-full box-border px-6 md:max-w-6xl pt-4 md:pt-8 md:pb-3 max-h-[843px] overflow-y-auto">
         <div className=" md:p-2 ml-[-15px] md:ml-0 md:w-[220px] w-[120px]">
           <NextLink href="/">
             <Image
@@ -381,7 +399,7 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
           </div>
         )}
         {activeComponent == "personal-info" && (
-          <div className="flex flex-col justify-center items-center md:pt-10 pt-40">
+          <div className="flex flex-col justify-center items-center md:pt-10 pt-40 mb-20">
             <div className="lg:w-[640px] box-border px-10">
               <div className="flex flex-col justify-center items-start mb-12 gap-4">
                 <Progress
@@ -400,200 +418,73 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
                   label="Tell us your name"
                   onChange={handleNameChange}
                 />
-                {userName && (
+                {userName.length > 2 && (
                   <div className="mt-5 flex flex-col gap-5">
                     <span className="font-bold">
                       Select one category that best describes your Linktree:
                     </span>
                     <div className="flex gap-2 flex-wrap">
-                      <Button
-                        startContent={
-                          <i className="ri-computer-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Tech"
-                        size="sm"
-                        radius="full"
-                        className="!w-auto px-4 py-1 box-content"
-                      >
-                        Tech
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-palette-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Influencer & Digital Creator"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Influencer & Digital Creator
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-file-text-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Business"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Business
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-pencil-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Education"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Education
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-movie-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Entertainment"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Entertainment
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-cake-3-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Food & Beverage"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Food & Beverage
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-plane-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Travel & Tourism"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Travel & Tourism
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-heart-pulse-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Health & Wellness"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Health & Wellness
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-hand-heart-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Non-Profit"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Non-Profit
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-magic-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Fashion & Beauty"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Fashion & Beauty
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-scales-3-fill !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Government"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Government
-                      </Button>
-                      <Button
-                        startContent={
-                          <i className="ri-function-line !text-xl"></i>
-                        }
-                        variant="bordered"
-                        value="Other"
-                        size="sm"
-                        radius="full"
-                        className="w-auto px-4 py-1 box-content"
-                      >
-                        Other
-                      </Button>
+                      {Object.values(categories).map((item, index) => (
+                        <Button
+                          startContent={
+                            <i className={`${item.icon} !text-xl`}></i>
+                          }
+                          variant="bordered"
+                          value={item.category}
+                          key={item.id}
+                          size="sm"
+                          radius="full"
+                          id={item.id}
+                          className={`!w-auto px-4 py-1 box-content text-sm ${
+                            activeCategory === item.id
+                              ? `bg-[#a1acfb] border-[#a1acfb]`
+                              : ""
+                          }`}
+                          onPress={() => {
+                            handleActiveCategory(item.id);
+                          }}
+                        >
+                          {item.category}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {category && userName.length > 2 && (
+                  <div className="mt-5 flex flex-col gap-5">
+                    <span className="font-bold">
+                      Pick your {category} category (optional):
+                    </span>
+                    <div className="flex gap-2 flex-wrap">
+                      {categories[category].values.map((item, index) => (
+                        <Button
+                          variant="bordered"
+                          key={item}
+                          id={item}
+                          size="sm"
+                          radius="full"
+                          className={`!w-auto px-3 py-1 text-sm ${
+                            activeSubCategory === item
+                              ? `bg-black border-black text-white`
+                              : ""
+                          }`}
+                          onPress={() => {
+                            handleActiveSubCategory(item);
+                          }}
+                        >
+                          {item}
+                        </Button>
+                      ))}
                     </div>
                   </div>
                 )}
               </div>
               <div className="flex flex-col justify-center items-center gap-10">
-                <Input
-                  placeholder="Password"
-                  size="sm"
-                  id="email-input"
-                  onChange={handlePasswordChange}
-                  isInvalid={isPasswordInvalid}
-                  color={
-                    isPasswordInvalid
-                      ? "danger"
-                      : inputs.password === ""
-                      ? "default"
-                      : "success"
-                  }
-                  errorMessage={
-                    isPasswordInvalid &&
-                    "Password must be at least 8 characters"
-                  }
-                  endContent={
-                    <button
-                      className="focus:outline-none"
-                      type="button"
-                      onClick={toggleVisibility}
-                    >
-                      {isVisible ? (
-                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                      ) : (
-                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                      )}
-                    </button>
-                  }
-                  radius="md"
-                  type={isVisible ? "text" : "password"}
-                  className="max-w-3xl md:max-w-xl"
-                />
                 <Button
                   radius="full"
                   size="lg"
-                  isDisabled={isPasswordDisabled}
-                  color={isPasswordDisabled ? "default" : "secondary"}
+                  isDisabled={isPersonalInfoButtonDisabled}
+                  color={isPersonalInfoButtonDisabled ? "default" : "secondary"}
                   fullWidth
                   className=" box-content px-0 max-w-3xl md:max-w-xl"
                   onClick={() => {

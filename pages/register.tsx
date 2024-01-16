@@ -8,7 +8,7 @@ export default function SignUpPage() {
 
   return (
     <div className="relative flex flex-col h-screen">
-      <Head icon="logo-alt" title="Login in or Sign Up | Twiggle" />
+      <Head icon="logo-alt" title="Log in or Sign Up | Twiggle" />
       <main className="flex justify-center">
         <section className="flex justify-center items-between w-full h-screen">
           <Auth component="register"/>
