@@ -1,7 +1,7 @@
-import Auth from "./auth";
 import { Head } from "@/layouts/head";
 import Image from "next/image";
 import React from "react";
+import Auth from "./auth";
 
 export default function SignUpPage() {
   const [image, setImage] = React.useState(Math.ceil(Math.random() * 12));
