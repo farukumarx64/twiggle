@@ -8,7 +8,7 @@ interface AuthProps {
   component: string;
 }
 
-export const Auth: React.FC<AuthProps> = ({ component }) => {
+const Auth: React.FC<AuthProps> = ({ component }) => {
   const [activeComponent, setActiveComponent] = React.useState(component);
   const { theme, setTheme } = useTheme();
   const [loginState, setLoginState] = React.useState<LoginState>({
@@ -64,3 +64,4 @@ export const Auth: React.FC<AuthProps> = ({ component }) => {
     </>
   );
 };
+export default Auth;
