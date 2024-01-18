@@ -1,26 +1,18 @@
 import {
   Button,
-  Kbd,
-  Link,
-  Input,
   Navbar as NextUINavbar,
   NavbarContent,
   NavbarMenu,
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-  NavbarMenuItem,
 } from "@nextui-org/react";
 
-import { link as linkStyles } from "@nextui-org/theme";
 
-import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
-import clsx from "clsx";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 
-import { Logo } from "@/components/icons";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import React from "react";

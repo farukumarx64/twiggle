@@ -1,4 +1,4 @@
-import { Auth } from "+/auth";
+import { Auth } from "./auth";
 import { Head } from "@/layouts/head";
 import Image from "next/image";
 import React from "react";
@@ -12,7 +12,7 @@ export default function SignUpPage() {
       <main className="flex justify-center">
         <section className="flex justify-center items-between w-full h-screen">
           <Auth component="register"/>
-          <div className="hidden lg:flex">
+          <div className="hidden lg:flex full-w">
             <Image
               src={`/twiggle-images/twiggle-tree-${image}.jpg`}
               alt=""

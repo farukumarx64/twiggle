@@ -9,7 +9,7 @@ export default function DefaultLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="relative flex flex-col h-screen items-center">
+		<div className="relative flex flex-col h-screen">
 			<Head icon="" title=""/>
 			<Navbar />
 			<main className="container mx-auto max-w-7xl px-3 flex-grow">
