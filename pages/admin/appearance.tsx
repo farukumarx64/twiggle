@@ -1,11 +1,11 @@
 import { Navbar } from "+/application/navbar";
 import { Head } from "@/layouts/head";
 
-export default function AdminPage() {
+export default function AppearanceSection() {
   return(
     <>
     <Head icon="logo-alt" title="Twiggle Admin"/>
-    <Navbar option="Links"/>
+    <Navbar option="Appearance"/>
     </>
   )
 }

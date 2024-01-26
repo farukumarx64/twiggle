@@ -15,16 +15,24 @@ import { ThemeSwitch } from "@/components/theme-switch";
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import React from "react";
+import React, { useState } from "react";
 
-export const Navbar = () => {
+interface NavbarProps {
+  option: string;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({option}) => {
   const { theme, setTheme } = useTheme();
+  const [currentOption, setCurrentOption] = useState(option)
 
   return (
-    <NextUINavbar maxWidth="xl" >
+    <NextUINavbar maxWidth="xl">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
-          <NextLink className="flex justify-start items-center gap-1" href="/">
+          <NextLink
+            className="flex justify-start items-center gap-1"
+            href="/admin"
+          >
             <Image
               src={`/images/logo-alt-${
                 theme === "dark" ? "white" : "black"
@@ -35,6 +43,45 @@ export const Navbar = () => {
             />
           </NextLink>
         </NavbarBrand>
+        <NavbarItem>
+          <NextLink href="/admin">
+          <Button
+            radius="full"
+            size="lg"
+            variant="light"
+            startContent={<i className="ri-stacked-view"></i>}
+            className={`flex items-center text-default-500 gap-2 ${option === 'Links' ? 'font-bold text-default-foreground' : ''}`}
+          >
+            <span className="">Links</span>
+          </Button>
+          </NextLink>
+        </NavbarItem>
+        <NavbarItem>
+          <NextLink href="/admin/appearance">
+          <Button
+            radius="full"
+            size="lg"
+            variant="light"
+            startContent={<i className="ri-shapes-line"></i>}
+            className={`flex items-center text-default-500 gap-2 ${option === 'Appearance' ? 'font-bold text-default-foreground' : ''}`}
+          >
+            <span className="">Appearance</span>
+          </Button>
+          </NextLink>
+        </NavbarItem>
+        <NavbarItem>
+          <NextLink href="/admin/settings">
+          <Button
+            radius="full"
+            size="lg"
+            variant="light"
+            startContent={<i className="ri-settings-line"></i>}
+            className={`flex items-center text-default-500 gap-2 ${option === 'Settings' ? 'font-bold text-default-foreground' : ''}`}
+          >
+            <span className="">Settings</span>
+          </Button>
+          </NextLink>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent
@@ -58,16 +105,16 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 gap-4" justify="end">
-          <Button
-            radius="full"
-            size="lg"
-            variant="ghost"
-            startContent={<i className="ri-share-line"></i>}
-            className="flex items-center gap-2"
-          >
-            <span className="font-bold">Share</span>
-          </Button>
-          <Avatar isBordered name="User" />
+        <Button
+          radius="full"
+          size="lg"
+          variant="ghost"
+          startContent={<i className="ri-share-line"></i>}
+          className="flex items-center gap-2"
+        >
+          <span className="font-bold">Share</span>
+        </Button>
+        <Avatar isBordered name="User" />
       </NavbarContent>
 
       <NavbarMenu>
