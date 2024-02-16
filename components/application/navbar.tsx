@@ -26,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({option}) => {
   const [currentOption, setCurrentOption] = useState(option)
 
   return (
-    <NextUINavbar maxWidth="xl">
+    <NextUINavbar maxWidth="xl" isBordered>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink
