@@ -4,6 +4,7 @@ interface HeaderCardProps {
   header: string;
   active: boolean;
 }
+export type SetHeaderCardProps = React.Dispatch<React.SetStateAction<HeaderCardProps>>;
 export const HeaderCard: React.FC<HeaderCardProps> = ({header, active}) => {
   return (
     

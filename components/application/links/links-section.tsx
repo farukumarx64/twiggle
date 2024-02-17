@@ -1,35 +1,38 @@
 import { Button, Divider } from "@nextui-org/react";
 import { useState } from "react";
-import { HeaderCard } from "./header-card";
+import { HeaderCard, HeaderCardProps } from "./header-card";
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
 } from "react-beautiful-dnd";
-
-interface headerState {
-  header: string;
-  active: boolean;
-}
+import { v4 } from "uuid";
 
 export const LinksSection = () => {
-  const [contents, setContents] = useState<headerState[]>([]);
+  const [contents, setContents] = useState<HeaderCardProps[]>([]);
   const [count, setCount] = useState(0);
 
   const handleAddHeader = () => {
+    const id = v4()
+    console.log(contents, id)
     const newHeader = {
-      header: `Header ${count}`,
+      header: '',
+      id: id,
       active: true,
+      link: false,
     };
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newHeader]);
   };
 
   const handleAddLink = () => {
+    const id = v4()
     const newLink = {
-      header: `Link ${count}`,
+      header: '',
+      id: id,
       active: true,
+      link: true,
     };
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newLink]);
@@ -42,6 +45,20 @@ export const LinksSection = () => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     setContents(items);
+  };
+
+  const handleDelete = (id: string) => {
+    setContents(prevContents =>
+      prevContents.filter(item => item.id !== id)
+    );
+  };
+
+  const handleHeaderCardStateChange = (updatedState: HeaderCardProps) => {
+    setContents((prevContents) =>
+      prevContents.map((item) =>
+        item.id === updatedState.id ? { ...item, ...updatedState } : item
+      )
+    );
   };
 
   return (
@@ -82,8 +99,8 @@ export const LinksSection = () => {
                   >
                     {contents.map((item, index) => (
                       <Draggable
-                        key={item.header}
-                        draggableId={item.header}
+                        key={item.id}
+                        draggableId={item.id}
                         index={index}
                       >
                         {(provided, snapshot) => (
@@ -94,8 +111,9 @@ export const LinksSection = () => {
                             className="mb-4 box-content px-0 w-full md:max-w-xl"
                           >
                             <HeaderCard
-                              header={item.header}
-                              active={item.active}
+                              state={item}
+                              setState={handleHeaderCardStateChange}
+                              onDelete={() => handleDelete(item.id)}
                             />
                           </div>
                         )}
