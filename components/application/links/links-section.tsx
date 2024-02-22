@@ -1,6 +1,6 @@
 import { Button, Divider } from "@nextui-org/react";
 import { useState } from "react";
-import { HeaderCard, HeaderCardProps } from "./header-card";
+import { HeaderCard, HeaderCardProps } from "./links-card";
 import {
   DragDropContext,
   Draggable,
@@ -14,10 +14,10 @@ export const LinksSection = () => {
   const [count, setCount] = useState(0);
 
   const handleAddHeader = () => {
-    const id = v4()
-    console.log(contents, id)
+    const id = v4();
+    console.log(contents, id);
     const newHeader = {
-      header: '',
+      header: "",
       id: id,
       active: true,
       link: false,
@@ -27,9 +27,9 @@ export const LinksSection = () => {
   };
 
   const handleAddLink = () => {
-    const id = v4()
+    const id = v4();
     const newLink = {
-      header: '',
+      header: "",
       id: id,
       active: true,
       link: true,
@@ -37,7 +37,6 @@ export const LinksSection = () => {
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newLink]);
   };
-
 
   const handleSort = (result: DropResult) => {
     if (!result.destination) return; // dropped outside the list
@@ -48,8 +47,8 @@ export const LinksSection = () => {
   };
 
   const handleDelete = (id: string) => {
-    setContents(prevContents =>
-      prevContents.filter(item => item.id !== id)
+    setContents((prevContents) =>
+      prevContents.filter((item) => item.id !== id)
     );
   };
 
