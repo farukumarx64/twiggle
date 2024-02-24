@@ -69,7 +69,7 @@ export const LinksSection = () => {
           radius="full"
           size="lg"
           fullWidth
-          className="box-content px-0 w-full md:max-w-xl mb-8"
+          className=" px-4 py-6 w-full md:max-w-xl mb-8"
           onPress={handleAddLink}
         >
           Add Link
@@ -87,7 +87,7 @@ export const LinksSection = () => {
           </Button>
         </div>
         <DragDropContext onDragEnd={handleSort}>
-          <div className="px-0 w-full md:max-w-xl mt-8">
+          <div className="px-0 w-full md:max-w-xl mt-8 overflow-y-scroll h-[60vh] md:h-[45vh] flex flex-col gap-3">
             <div>
               <Droppable droppableId="droppable">
                 {(provided, snapshot) => (

@@ -7,7 +7,6 @@ export const AppearanceCard = () => {
       <div className="w-full flex justify-between">
         <div className=" w-36">
           <Avatar isBordered name="User" className="w-20 h-20 text-large" />
-    
         </div>
         <div className="w-full flex flex-col">
           <Button
@@ -30,9 +29,11 @@ export const AppearanceCard = () => {
         <Input label="Profile Title" />
         <Textarea label="Bio"></Textarea>
       </div>
-      <Divider orientation="horizontal" className=" my-5"/>
+      <Divider orientation="horizontal" className="my-5" />
       <div>
-        <Link href="/admin/settings" className="text-lg flex gap-1"><i className="ri-add-line text-xl"></i>Add social icons</Link>
+        <Link href="/admin/settings" className="text-lg flex gap-1">
+          <i className="ri-add-line text-xl"></i>Add social icons
+        </Link>
       </div>
     </div>
   );
