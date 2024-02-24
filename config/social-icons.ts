@@ -1,4 +1,4 @@
-type SocialsTypes = {
+export type SocialsTypes = {
   [key: string]: {
     id: string;
     name: string;

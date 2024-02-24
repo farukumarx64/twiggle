@@ -87,7 +87,7 @@ export const LinksSection = () => {
           </Button>
         </div>
         <DragDropContext onDragEnd={handleSort}>
-          <div className="px-0 w-full md:max-w-xl mt-8 overflow-y-scroll h-[60vh] md:h-[45vh] flex flex-col gap-3">
+          <div className="px-0 w-full md:max-w-xl mt-8 overflow-y-scroll h-[60vh] md:h-[48vh] flex flex-col gap-3">
             <div>
               <Droppable droppableId="droppable">
                 {(provided, snapshot) => (
