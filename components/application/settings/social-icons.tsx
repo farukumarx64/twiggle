@@ -53,6 +53,7 @@ export const SocialIcons: React.FC = () => {
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
+        placement="center"
         scrollBehavior="inside"
         onClose={() => handleIconSectionChange("first")}
       >
