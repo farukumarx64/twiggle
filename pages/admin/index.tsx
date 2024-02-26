@@ -10,9 +10,7 @@ export default function AdminPage() {
     <Navbar option="Links"/>
     <div className="flex">
       <LinksSection />
-      <div className="hidden md:inline">
       <Preview />
-      </div>
     </div>
     </div>
   )

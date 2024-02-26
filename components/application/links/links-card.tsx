@@ -99,9 +99,9 @@ export const HeaderCard: React.FC<{
           }}
         />
       </div>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center gap-5 items-center">
         <Switch isSelected={state.active} size="sm" onClick={handleActive} />
-        <i className="ri-delete-bin-line text-lg" onClick={handleDelete}></i>
+        <i className="ri-delete-bin-line text-xl" onClick={handleDelete}></i>
       </div>
     </div>
   );

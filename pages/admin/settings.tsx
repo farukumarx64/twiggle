@@ -10,9 +10,7 @@ export default function Settings() {
     <Navbar option="Settings"/>
     <div className="flex">
       <SettingSection />
-      <div className="hidden md:inline">
       <Preview />
-      </div>
     </div>
     </>
   )

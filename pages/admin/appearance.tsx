@@ -10,9 +10,7 @@ export default function Appearance() {
     <Navbar option="Appearance"/>
     <div className="flex">
       <AppearanceSection />
-      <div className="hidden md:inline">
       <Preview />
-      </div>
     </div>
     </>
   )
