@@ -129,6 +129,17 @@ export const LinksSection = () => {
       <div className="hidden md:inline">
         <Divider orientation="vertical" />
       </div>
+      <div className="fixed bottom-12 md:hidden">
+        <Button
+          radius="full"
+          color="secondary"
+          className="p-6"
+          variant="shadow"
+          startContent={<i className="ri-eye-line"></i>}
+        >
+          <span className="font-bold">Preview</span>
+        </Button>
+      </div>
     </div>
   );
 };
