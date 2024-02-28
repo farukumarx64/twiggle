@@ -1,5 +1,6 @@
 // store/userReducer.ts
-import { Reducer } from 'redux';
+import { HeaderCardProps } from "+/application/links/links-card";
+import { Reducer } from "redux";
 
 // Define the interface for the user state
 interface UserState {
@@ -7,13 +8,13 @@ interface UserState {
   profilePic: string;
   bio: string;
   profileTitle: string;
-  header: string;
-  links: string[]; // Assuming links are represented as an array of strings
+  header: HeaderCardProps[];
+  links: HeaderCardProps[]; // Assuming links are represented as an array of strings
 }
 
 // Define action types
 enum UserActionTypes {
-  UPDATE_USER_INFO = 'UPDATE_USER_INFO',
+  UPDATE_USER_INFO = "UPDATE_USER_INFO",
 }
 
 // Define action interfaces
@@ -27,16 +28,19 @@ type UserAction = UpdateUserInfoAction | UnknownAction;
 
 // Define the initial state for the user reducer
 const initialState: UserState = {
-  username: '',
-  profilePic: '',
-  bio: '',
-  profileTitle: '',
-  header: '',
+  username: "",
+  profilePic: "",
+  bio: "",
+  profileTitle: "",
+  header: [],
   links: [],
 };
 
 // Define the user reducer function
-const userReducer: Reducer<UserState, UserAction> = (state = initialState, action) => {
+const userReducer: Reducer<UserState, UserAction> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case UserActionTypes.UPDATE_USER_INFO:
       return {
