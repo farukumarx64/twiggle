@@ -1,13 +1,16 @@
+import { RootState } from "@/reducers/reducers";
 import { Avatar } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export const Preview = () => {
   const [scaleFactor, setScaleFactor] = useState(100);
+  const user = useSelector((state: RootState) => state.user);
+  console.log(user);
 
   useEffect(() => {
     function updateScaleFactor() {
       const screenHeight = window.innerHeight;
-      console.log(Math.round(screenHeight * 1.033));
       // Define your logic to calculate scale factor based on screen height
       let newScaleFactor = Math.round(screenHeight * 1.033) / 1000; // 1000 is an arbitrary value, adjust it as needed
       setScaleFactor(newScaleFactor);
@@ -36,10 +39,15 @@ export const Preview = () => {
           <div className="w-full">
             <div className="flex flex-col justify-center items-center w-full">
               <Avatar
-                name="@"
+                name={user.profileTitle[0].toUpperCase() || "@"}
                 className="w-20 h-20 text-3xl text-white bg-black mb-2"
               />
-              <span className="text-black font-bold">@username</span>
+              <span className="text-black font-bold">
+                {user.profileTitle || "@username"}
+              </span>
+              <span className="text-xs text-default-500">
+                {user.bio || "bio"}
+              </span>
             </div>
             {/* Content */}
           </div>

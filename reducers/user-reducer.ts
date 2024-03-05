@@ -1,9 +1,9 @@
-// store/userReducer.ts
+// reducer/user-reducer.ts
 import { HeaderCardProps } from "+/application/links/links-card";
 import { Reducer } from "redux";
 
 // Define the interface for the user state
-interface UserState {
+export interface UserState {
   username: string;
   profilePic: string;
   bio: string;
@@ -13,7 +13,7 @@ interface UserState {
 }
 
 // Define action types
-enum UserActionTypes {
+export enum UserActionTypes {
   UPDATE_USER_INFO = "UPDATE_USER_INFO",
 }
 
