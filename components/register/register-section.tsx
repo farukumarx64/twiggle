@@ -10,7 +10,9 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import NextLink from "next/link";
+import { useDispatch } from 'react-redux';
 import React from "react";
+import { updateSignUpInfo } from "@/state/actions/signUpActions";
 
 export interface RegisterState {
   email: boolean;
@@ -25,6 +27,7 @@ export const RegisterComponent: React.FC<{
   setState: SetRegisterState;
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
+  const dispatch = useDispatch();
   // ... code for the register component
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const isButtonDisabled = !state.email || !state.username;
@@ -87,13 +90,14 @@ export const RegisterComponent: React.FC<{
               <span className="text-base">Twgl.link/</span>
             </div>
           }
-          size="sm"
+          size="lg"
           id="email-input"
           radius="md"
           onChange={handleUsernameChange}
           className="max-w-3xl md:max-w-xl"
           classNames={{
-            input: "!pl-[2px] text-base",
+            input: "!pl-[2px] text-sm",
+            
           }}
         />
         <Button
@@ -105,6 +109,7 @@ export const RegisterComponent: React.FC<{
           className=" box-content px-0 max-w-3xl md:max-w-xl"
           onPress={() => {
             handleComponentChange("register-password");
+            dispatch(updateSignUpInfo({email: state.value, username: state.username }))
           }}
         >
           Create account

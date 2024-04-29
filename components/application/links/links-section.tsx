@@ -8,10 +8,15 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 import { v4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { addUserHeader, addUserLink } from "@/state/actions/userActions";
+import { RootState } from "@/state/reducers/reducers";
 
 export const LinksSection = () => {
   const [contents, setContents] = useState<HeaderCardProps[]>([]);
   const [count, setCount] = useState(0);
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
 
   const handleAddHeader = () => {
     const id = v4();
@@ -24,6 +29,7 @@ export const LinksSection = () => {
     };
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newHeader]);
+    dispatch(addUserHeader([...user.header, newHeader])); // Dispatch action to add header
   };
 
   const handleAddLink = () => {
@@ -36,6 +42,7 @@ export const LinksSection = () => {
     };
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newLink]);
+    dispatch(addUserLink([...user.header, newLink])); // Dispatch action to add link
   };
 
   const handleSort = (result: DropResult) => {

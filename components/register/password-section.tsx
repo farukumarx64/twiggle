@@ -1,11 +1,13 @@
 import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
+import { updateSignUpInfo } from "@/state/actions/signUpActions";
 import {
   Button,
   Input,
   Progress,
 } from "@nextui-org/react";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 export interface PasswordState {
   password: string;
@@ -20,6 +22,7 @@ export const PasswordSetupComponent: React.FC<{
   setState: SetPasswordState;
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
+  const dispatch = useDispatch();
   // ... code for the password setup component
   const isPasswordDisabled =
     !state.password ||
@@ -80,10 +83,10 @@ export const PasswordSetupComponent: React.FC<{
             Choose a strong password with at least 8 characters.
           </span>
         </div>
-        <div className="flex flex-col justify-center items-center gap-10">
+        <div className="flex flex-col justify-center items-center gap-5">
           <Input
             placeholder="Password"
-            size="sm"
+            size="lg"
             id="email-input"
             onChange={handlePasswordChange}
             isInvalid={isPasswordInvalid}
@@ -118,7 +121,7 @@ export const PasswordSetupComponent: React.FC<{
           />
           <Input
             placeholder="Verify Password"
-            size="sm"
+            size="lg"
             id="email-input"
             onChange={handleVerifyPasswordChange}
             isInvalid={state.isVerifyPasswordInvalid}
@@ -158,6 +161,7 @@ export const PasswordSetupComponent: React.FC<{
             className=" box-content px-0 max-w-3xl md:max-w-xl"
             onPress={() => {
               handleComponentChange("personal-info");
+              dispatch(updateSignUpInfo({password: state.password }))
             }}
           >
             Continue

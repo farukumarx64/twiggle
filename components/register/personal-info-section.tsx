@@ -1,6 +1,10 @@
 import { categories } from "@/config/categories";
+import { updateSignUpInfo } from "@/state/actions/signUpActions";
 import { Button, Input, Progress } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios"; // Import Axios for making HTTP requests
+import { RootState } from "@/state/reducers/reducers";
 
 export interface PersonalInfoState {
   userName: string;
@@ -18,6 +22,9 @@ export const PersonalInfoComponent: React.FC<{
   setState: SetPersonalInfoState;
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.signup);
+  const [loading, setLoading] = useState(false);
   // ... code for the personal information component
   const isPersonalInfoButtonDisabled = !state.userName || !state.activeCategory;
   const handleCategoryChange = (id: string) => {
@@ -39,6 +46,40 @@ export const PersonalInfoComponent: React.FC<{
       ...prevInputs,
       userName: e.target.value,
     }));
+  };
+
+  const handleContinue = async () => {
+    setLoading(true);
+    try {
+      // Dispatch action to update sign up info
+      dispatch(
+        updateSignUpInfo({
+          fullname: state.userName,
+          category: state.activeCategory,
+          subcategory: state.activeSubCategory,
+        })
+      );
+
+      const response = await axios.post("/api/signup", {
+        email: user.email, // Add email parameter if required
+        password: user.password, // Add password parameter if required
+        username: user.username,
+        fullname: user.fullname,
+        category: user.category,
+        subcategory: user.subcategory,
+      });
+
+      // Handle success response
+      console.log("Response:", response.data);
+
+      // Navigate to the next step/component
+      handleComponentChange("confirmation");
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,15 +161,17 @@ export const PersonalInfoComponent: React.FC<{
           <Button
             radius="full"
             size="lg"
-            isDisabled={isPersonalInfoButtonDisabled}
-            color={isPersonalInfoButtonDisabled ? "default" : "secondary"}
+            isDisabled={isPersonalInfoButtonDisabled || loading}
+            color={
+              isPersonalInfoButtonDisabled || loading ? "default" : "secondary"
+            }
             fullWidth
             className=" box-content px-0 max-w-3xl md:max-w-xl"
             onClick={() => {
-              handleComponentChange("confirmation");
+              handleContinue();
             }}
           >
-            Continue
+            {loading ? "Loading..." : "Continue"}
           </Button>
         </div>
       </div>

@@ -49,7 +49,7 @@ export const LoginComponent: React.FC<{
         />
         <Input
           placeholder="Password"
-          size="sm"
+          size="lg"
           id="email-input"
           onChange={handlePasswordChange}
           endContent={
@@ -68,6 +68,9 @@ export const LoginComponent: React.FC<{
           radius="md"
           type={state.isVisible ? "text" : "password"}
           className="max-w-3xl md:max-w-xl"
+          classNames={{
+            input: "text-sm"
+          }}
         />
         <Button
           radius="full"

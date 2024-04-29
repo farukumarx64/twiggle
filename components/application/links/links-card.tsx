@@ -1,5 +1,7 @@
+import { updateUserInfo } from "@/state/actions/userActions";
 import { Input, Switch } from "@nextui-org/react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export interface HeaderCardProps {
   header: string;
@@ -18,6 +20,7 @@ export const HeaderCard: React.FC<{
   onDelete: () => void;
 }> = ({ state, setState, onDelete }) => {
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
   const handleHeaderClick = () => {
     setIsReadOnly(false);
@@ -29,6 +32,7 @@ export const HeaderCard: React.FC<{
       ...state,
       header: event.target.value,
     });
+    dispatch(updateUserInfo({header: [state] }))
   };
 
   const handleActive = () => {

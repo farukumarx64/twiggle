@@ -80,6 +80,7 @@ const Auth: React.FC<AuthProps> = ({ component }) => {
         break;
     }
   };
+  console.log(registerState, passwordState, personalInfoState, )
   return (
     <>
       <div className="w-full box-border px-6 pt-4 md:pt-8 md:pb-3 max-h-[843px] overflow-y-auto lg:w-2/3">

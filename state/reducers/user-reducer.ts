@@ -8,13 +8,14 @@ export interface UserState {
   profilePic: string;
   bio: string;
   profileTitle: string;
-  header: HeaderCardProps[];
-  links: HeaderCardProps[]; // Assuming links are represented as an array of strings
+  header: HeaderCardProps[]; // Assuming links are represented as an array of header card
 }
 
 // Define action types
 export enum UserActionTypes {
   UPDATE_USER_INFO = "UPDATE_USER_INFO",
+  ADD_USER_HEADER = "ADD_USER_HEADER",
+  ADD_USER_LINK = "ADD_USER_LINK",
 }
 
 // Define action interfaces
@@ -23,8 +24,19 @@ interface UpdateUserInfoAction {
   payload: Partial<UserState>; // Partial type to allow updating only specific fields
 }
 
+export interface AddUserHeaderAction {
+  type: UserActionTypes.ADD_USER_HEADER;
+  payload: HeaderCardProps;
+}
+
+export interface AddUserLinkAction {
+  type: UserActionTypes.ADD_USER_LINK;
+  payload: HeaderCardProps;
+}
+
 // Define a union type for all possible actions
-type UserAction = UpdateUserInfoAction | UnknownAction;
+type UserAction = UpdateUserInfoAction | AddUserHeaderAction
+| AddUserLinkAction | UnknownAction;
 
 // Define the initial state for the user reducer
 const initialState: UserState = {
@@ -33,7 +45,6 @@ const initialState: UserState = {
   bio: "",
   profileTitle: "",
   header: [],
-  links: [],
 };
 
 // Define the user reducer function

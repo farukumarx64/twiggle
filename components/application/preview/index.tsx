@@ -1,4 +1,4 @@
-import { RootState } from "@/reducers/reducers";
+import { RootState } from "@/state/reducers/reducers";
 import { Avatar } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -39,7 +39,7 @@ export const Preview = () => {
           <div className="w-full">
             <div className="flex flex-col justify-center items-center w-full">
               <Avatar
-                name={user.profileTitle[0].toUpperCase() || "@"}
+                name={user.profileTitle[0]?.toUpperCase() || "@"}
                 className="w-20 h-20 text-3xl text-white bg-black mb-2"
               />
               <span className="text-black font-bold">
