@@ -3,6 +3,7 @@ import {
   Button,
   Progress,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -21,6 +22,7 @@ export const ConfirmationComponent: React.FC<{
 }> = ({ state, setState, handleComponentChange }) => {
   // ... code for the confirmation component
   const user = useSelector((state: RootState) => state.signup);
+  const router = useRouter();
   return (
     <div className="flex flex-col justify-center items-center md:pt-10 pt-40 mb-20">
       <div className="lg:w-[640px] box-border px-10">
@@ -42,7 +44,7 @@ export const ConfirmationComponent: React.FC<{
             fullWidth
             className=" box-content px-0 max-w-3xl md:max-w-xl"
             onPress={() => {
-              handleComponentChange("register");
+              router.push("/admin");
             }}
           >
             Continue

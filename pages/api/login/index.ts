@@ -31,6 +31,11 @@ export default async function handler(
       return res.status(400).json({ error: error.message || "Login failed" });
     } else {
       console.log("response: ", data);
+       // Set cookies in the response containing access token and refresh token
+       res.setHeader('Set-Cookie', [
+        `access_token=${data.session.access_token}; HttpOnly; Secure; SameSite=Strict`,
+        `refresh_token=${data.session.refresh_token}; HttpOnly; Secure; SameSite=Strict`,
+      ]);
       return res.status(200).json({ user: data.user, session: data.session });
     }
   } catch (error) {

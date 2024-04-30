@@ -21,7 +21,11 @@ import { ThemeSwitch } from "@/components/theme-switch";
 
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { retrieveTokens } from "#/tokens";
+import router from "next/router";
+import { createClient } from "@supabase/supabase-js";
 
 interface NavbarProps {
   option: string;
@@ -29,6 +33,25 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ option }) => {
   const { theme, setTheme } = useTheme();
+  const handleSignOut = async () => {
+    try {
+      await axios.post("/api/signout");
+      router.push("/login");
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
+    }
+  };
+
+  const getCurrentSession = async () => {
+    try {
+      const response = await axios.get("/api/get-session");
+      console.log(response.data);
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <NextUINavbar maxWidth="xl" isBordered>
@@ -174,6 +197,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
                 className="text-danger w-80"
                 color="danger"
                 startContent={<i className="ri-logout-box-line text-xl"></i>}
+                onClick={() => {
+                  console.log("man");
+                  handleSignOut();
+                }}
               >
                 <span className="text-md ml-4">Sign out </span>
               </DropdownItem>
@@ -270,6 +297,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
               className="text-danger w-60"
               color="danger"
               startContent={<i className="ri-logout-box-line text-xl"></i>}
+              onClick={() => {
+                console.log("man");
+                handleSignOut();
+              }}
             >
               <span className="text-md ml-4">Sign out </span>
             </DropdownItem>

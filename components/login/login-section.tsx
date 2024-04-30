@@ -1,8 +1,13 @@
 import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
+import { updateLoginInfo } from "@/state/actions/loginActions";
+import { RootState } from "@/state/reducers/reducers";
 import { Button, Input } from "@nextui-org/react";
+import axios from "axios";
 import NextLink from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export interface LoginState {
   email: boolean;
@@ -18,9 +23,14 @@ export const LoginComponent: React.FC<{
   setState: SetLoginState;
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((state: RootState) => state.login);
+  const router = useRouter();
   const isButtonDisabled = !state.email || !state.password;
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(state.username)
+    console.log(state.username);
     setState((prevInputs: any) => ({
       ...prevInputs,
       username: e.target.value,
@@ -29,6 +39,55 @@ export const LoginComponent: React.FC<{
   };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs) => ({ ...prevInputs, password: e.target.value }));
+  };
+  const isEmail = () => {
+    if (state.username !== "") {
+      console.log(state.username.includes("@"));
+      return state.username.includes("@");
+    }
+  };
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkLoggedIn = async () => {
+      try {
+        const response = await axios.get("/api/login/check");
+        if (response.data.loggedIn) {
+          router.push("/admin");
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoggedIn();
+  }, [router]); // Run once when component mounts
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+
+      const response = await axios.post("/api/login", {
+        email: user.username, // Add email parameter
+        password: user.password, // Add password parameter
+      });
+
+      // Handle success response
+      console.log("Response:", response.data);
+      const { session } = response.data;
+      console.log(
+        "Access Token: ",
+        session.access_token,
+        "\nRefresh Token: ",
+        session.refresh_token
+      );
+      router.push("/admin");
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   const toggleVisibility = () =>
     setState((prevInputs) => ({ ...prevInputs, isVisible: !state.isVisible }));
@@ -69,18 +128,28 @@ export const LoginComponent: React.FC<{
           type={state.isVisible ? "text" : "password"}
           className="max-w-3xl md:max-w-xl"
           classNames={{
-            input: "text-sm"
+            input: "text-sm",
           }}
         />
         <Button
           radius="full"
           size="lg"
-          isDisabled={isButtonDisabled}
-          color={isButtonDisabled ? "default" : "secondary"}
+          isDisabled={isButtonDisabled || loading}
+          color={isButtonDisabled || loading ? "default" : "secondary"}
           fullWidth
           className=" box-content px-0 max-w-3xl md:max-w-xl"
+          onPress={() => {
+            dispatch(
+              updateLoginInfo({
+                username: state.username,
+                password: state.password,
+                email: isEmail(),
+              })
+            );
+            handleLogin();
+          }}
         >
-          <NextLink href="/admin" passHref>Log in</NextLink>
+          {loading ? "Loading..." : "Log in"}
         </Button>
       </div>
       <div className="flex justify-center my-3 text-default-500">OR</div>
