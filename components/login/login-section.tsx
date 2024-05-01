@@ -1,7 +1,7 @@
 import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
-import { updateLoginInfo } from "@/state/actions/loginActions";
-import { RootState } from "@/state/reducers/reducers";
+import { updateLoginInfo } from "@/utils/state/actions/loginActions";
+import { RootState } from "@/utils/state/reducers/reducers";
 import { Button, Input } from "@nextui-org/react";
 import axios from "axios";
 import NextLink from "next/link";
@@ -52,7 +52,7 @@ export const LoginComponent: React.FC<{
     const checkLoggedIn = async () => {
       try {
         const response = await axios.get("/api/login/check");
-        if (response.data.loggedIn) {
+        if (response.data.session) {
           router.push("/admin");
         }
       } catch (error) {

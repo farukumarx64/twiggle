@@ -9,8 +9,8 @@ import {
 } from "react-beautiful-dnd";
 import { v4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserHeader, addUserLink } from "@/state/actions/userActions";
-import { RootState } from "@/state/reducers/reducers";
+import { addUserHeader, addUserLink } from "@/utils/state/actions/userActions";
+import { RootState } from "@/utils/state/reducers/reducers";
 
 export const LinksSection = () => {
   const [contents, setContents] = useState<HeaderCardProps[]>([]);

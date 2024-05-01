@@ -1,5 +1,5 @@
 import { HeaderCardProps } from "+/application/links/links-card";
-import { AddUserHeaderAction, AddUserLinkAction, UserActionTypes, UserState } from "@/state/reducers/user-reducer";
+import { AddUserHeaderAction, AddUserLinkAction, UserActionTypes, UserState } from "@/utils/state/reducers/user-reducer";
 
 // actions/userActions.ts
 export const updateUserInfo = (payload: Partial<UserState>) => ({

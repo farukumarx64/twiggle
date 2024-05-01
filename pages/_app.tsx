@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import "@/styles/globals.css";
 import "remixicon/fonts/remixicon.css";
 import { Provider } from "react-redux";
-import store from "@/state/store";
+import store from "@/utils/state/store";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();

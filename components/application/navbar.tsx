@@ -43,16 +43,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
     }
   };
 
-  const getCurrentSession = async () => {
-    try {
-      const response = await axios.get("/api/get-session");
-      console.log(response.data);
-    } catch (error) {
-      // Handle error response
-      console.error("Error:", error);
-    }
-  };
-
   return (
     <NextUINavbar maxWidth="xl" isBordered>
       <NavbarContent

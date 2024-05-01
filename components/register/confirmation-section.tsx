@@ -1,4 +1,4 @@
-import { RootState } from "@/state/reducers/reducers";
+import { RootState } from "@/utils/state/reducers/reducers";
 import {
   Button,
   Progress,

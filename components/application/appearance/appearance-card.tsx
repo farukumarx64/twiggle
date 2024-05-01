@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { useDispatch } from 'react-redux';
-import { updateUserInfo } from '@/state/actions/userActions';
+import { updateUserInfo } from '@/utils/state/actions/userActions';
 
 export const AppearanceCard = () => {
   const dispatch = useDispatch();

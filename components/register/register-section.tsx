@@ -12,7 +12,7 @@ import {
 import NextLink from "next/link";
 import { useDispatch } from 'react-redux';
 import React from "react";
-import { updateSignUpInfo } from "@/state/actions/signUpActions";
+import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
 
 export interface RegisterState {
   email: boolean;

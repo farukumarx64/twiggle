@@ -1,10 +1,10 @@
 import { categories } from "@/config/categories";
-import { updateSignUpInfo } from "@/state/actions/signUpActions";
+import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
 import { Button, Input, Progress } from "@nextui-org/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios"; // Import Axios for making HTTP requests
-import { RootState } from "@/state/reducers/reducers";
+import { RootState } from "@/utils/state/reducers/reducers";
 
 export interface PersonalInfoState {
   userName: string;

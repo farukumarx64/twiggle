@@ -1,4 +1,4 @@
-import { updateUserInfo } from "@/state/actions/userActions";
+import { updateUserInfo } from "@/utils/state/actions/userActions";
 import { Input, Switch } from "@nextui-org/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";

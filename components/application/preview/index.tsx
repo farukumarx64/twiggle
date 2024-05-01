@@ -1,4 +1,4 @@
-import { RootState } from "@/state/reducers/reducers";
+import { RootState } from "@/utils/state/reducers/reducers";
 import { Avatar } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";

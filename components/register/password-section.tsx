@@ -1,6 +1,6 @@
 import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
-import { updateSignUpInfo } from "@/state/actions/signUpActions";
+import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
 import {
   Button,
   Input,
