@@ -118,7 +118,7 @@ export const RegisterComponent: React.FC<{
       <div className="flex justify-center">
         <div className="text-sm text-center text-default-500 pt-6 leading-5 max-w-3xl md:max-w-xl">
           By clicking <span className="font-bold">Create account</span>, you
-          agree to Linktree&apos;s{" "}
+          agree to Twiggle&apos;s{" "}
           <Button
             variant="flat"
             className=" bg-transparent text-sm px-0 h-auto"
@@ -142,34 +142,26 @@ export const RegisterComponent: React.FC<{
         </div>
       </div>
       <div className="flex justify-center my-3 text-default-500">OR</div>
-      <div className="flex flex-col gap-3 items-center">
-        <Button
-          radius="full"
+      <div className="flex gap-3 items-center justify-center">
+      <Button
+          radius="lg"
           size="lg"
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+          isIconOnly 
         >
-          <span className="flex">
-            <AppIcon icon="Google" />
-            <span className="font-bold pl-2 text-black">
-              Sign up with Google
-            </span>
-          </span>
+          <AppIcon icon="Google" />
         </Button>
         <Button
-          radius="full"
+          radius="lg"
           size="lg"
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+          isIconOnly 
         >
-          <span className="flex">
-            <AppIcon icon="Apple" />
-            <span className="font-bold pl-2 text-black">
-              Sign up with Apple
-            </span>
-          </span>
+          <AppIcon icon="Facebook" />
         </Button>
       </div>
       <div className="flex justify-center mt-8">
