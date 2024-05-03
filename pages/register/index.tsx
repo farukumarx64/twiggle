@@ -1,10 +1,28 @@
 import { Head } from "@/layouts/head";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import Auth from "./auth";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function SignUpPage() {
   const [image, setImage] = React.useState(Math.ceil(Math.random() * 12));
+  const router = useRouter();
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkLoggedIn = async () => {
+      try {
+        const response = await axios.get("/api/login/check");
+        if (response.data.session) {
+          router.push("/admin");
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoggedIn();
+  }, [router]); // Run once when component mounts
 
   return (
     <div className="relative flex flex-col h-screen">

@@ -17,21 +17,19 @@ import {
 
 import NextLink from "next/link";
 
-import { ThemeSwitch } from "@/components/theme-switch";
 
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { retrieveTokens } from "#/tokens";
 import router from "next/router";
-import { createClient } from "@supabase/supabase-js";
 
 interface NavbarProps {
   option: string;
+  userData: any;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ option }) => {
+export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
   const { theme, setTheme } = useTheme();
   const handleSignOut = async () => {
     try {
@@ -41,6 +39,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
       // Handle error response
       console.error("Error:", error);
     }
+  };
+
+  const getUser = async () => {
+    console.log(userData)
   };
 
   return (
@@ -140,8 +142,8 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
             >
               <DropdownItem isReadOnly key="user" className="w-80 opacity-100">
                 <User
-                  name="@UserName"
-                  description="twgl.link/user"
+                  name={`@${userData?.fullname?.replace(/\b\w/g, (c: string) => c.toUpperCase()) || userData?.full_name || ''}`}
+                  description={`twgl.link/${userData?.username}`}
                   classNames={{
                     name: "font-semibold mb-1 ml-2",
                     description: "text-default-500 ml-2",
@@ -163,6 +165,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
                   key="my-account"
                   className="w-80"
                   startContent={<i className="ri-account-box-line text-xl"></i>}
+                  onClick={getUser}
                 >
                   <span className="text-md ml-4">My account</span>
                 </DropdownItem>
@@ -240,8 +243,8 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
           >
             <DropdownItem isReadOnly key="user" className="w-60 opacity-100">
               <User
-                name="@UserName"
-                description="twgl.link/user"
+                name={`@${userData?.fullname?.replace(/\b\w/g, (c: string) => c.toUpperCase())  || userData?.full_name || ''}`}
+                description={`twgl.link/${userData?.username}`}
                 classNames={{
                   name: "font-semibold mb-1 ml-2",
                   description: "text-default-500 ml-2",
@@ -263,6 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option }) => {
                 key="my-account"
                 className="w-60"
                 startContent={<i className="ri-account-box-line text-xl"></i>}
+                onClick={getUser}
               >
                 <span className="text-md ml-4">My account</span>
               </DropdownItem>

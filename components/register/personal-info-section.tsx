@@ -37,28 +37,36 @@ export const PersonalInfoComponent: React.FC<{
   const handleActiveCategory = (id: string) => {
     handleCategoryChange(id);
     setState((prevInputs: any) => ({ ...prevInputs, activeCategory: id }));
+    dispatch(
+      updateSignUpInfo({
+        category: id,
+      })
+    );
+    console.log(state);
   };
   const handleActiveSubCategory = (id: string) => {
     setState((prevInputs: any) => ({ ...prevInputs, activeSubCategory: id }));
+    dispatch(
+      updateSignUpInfo({
+        subcategory: id,
+      })
+    );
   };
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
       userName: e.target.value,
     }));
+    dispatch(
+      updateSignUpInfo({
+        fullname: e.target.value,
+      })
+    );
   };
 
   const handleContinue = async () => {
     setLoading(true);
     try {
-      // Dispatch action to update sign up info
-      dispatch(
-        updateSignUpInfo({
-          fullname: state.userName,
-          category: state.activeCategory,
-          subcategory: state.activeSubCategory,
-        })
-      );
 
       const response = await axios.post("/api/signup", {
         email: user.email, // Add email parameter if required

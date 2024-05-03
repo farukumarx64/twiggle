@@ -36,9 +36,20 @@ export const LoginComponent: React.FC<{
       username: e.target.value,
       email: e.target.value !== "",
     }));
+    dispatch(
+      updateLoginInfo({
+        username: e.target.value,
+        email: isEmail(),
+      })
+    );
   };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs) => ({ ...prevInputs, password: e.target.value }));
+    dispatch(
+      updateLoginInfo({
+        password: e.target.value,
+      })
+    );
   };
   const isEmail = () => {
     if (state.username !== "") {
@@ -66,7 +77,6 @@ export const LoginComponent: React.FC<{
   const handleLogin = async () => {
     setLoading(true);
     try {
-
       const response = await axios.post("/api/login", {
         email: user.username, // Add email parameter
         password: user.password, // Add password parameter
@@ -87,6 +97,37 @@ export const LoginComponent: React.FC<{
       console.error("Error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+  const handleOAuth = async (provider: string) => {
+    setLoading(true);
+    try {
+      const response = await axios.post("/api/login/oauth", {
+        provider: provider,
+        url: window.location.origin
+      });
+
+      // Handle success response
+      console.log("Response:", response.data);
+      const { url } = response.data;
+      router.push(url);
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const response = await axios.post("/api/login/token");
+
+      // Handle success response
+      console.log("Response:", response.data);
+    } catch (error) {
+      // Handle error response
+      console.error("Error:", error);
     }
   };
   const toggleVisibility = () =>
@@ -153,34 +194,28 @@ export const LoginComponent: React.FC<{
         </Button>
       </div>
       <div className="flex justify-center my-3 text-default-500">OR</div>
-      <div className="flex flex-col gap-3 items-center">
+      <div className="flex gap-3 items-center justify-center">
         <Button
-          radius="full"
+          radius="lg"
           size="lg"
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+          onPress={()=>{handleOAuth('google')}}
+          isIconOnly 
         >
-          <span className="flex">
-            <AppIcon icon="Google" />
-            <span className="font-bold pl-2 text-black">
-              Continue with Google
-            </span>
-          </span>
+          <AppIcon icon="Google" />
         </Button>
         <Button
-          radius="full"
+          radius="lg"
           size="lg"
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+          onPress={()=>{handleOAuth('facebook')}}
+          isIconOnly 
         >
-          <span className="flex">
-            <AppIcon icon="Apple" />
-            <span className="font-bold pl-2 text-black">
-              Continue with Apple
-            </span>
-          </span>
+          <AppIcon icon="Facebook" />
         </Button>
       </div>
       <div className="flex justify-center mt-8">
