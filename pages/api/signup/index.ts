@@ -42,15 +42,16 @@ export default async function handler(
       const signUpData = {
         username: request.username,
         fullname: request.fullname,
-        category: request.category,
-        subcategory: request.subcategory,
+        profile_pic_url: null, // You can update this later
+        bio: null, // You can update this later
+        // Other user data
       };
       const { data: userData, error: userError } = await supabase
-        .from("user-twiggle-data")
+        .from("users")
         .insert([
           {
             user_id: data.user?.id, // Assuming user ID is provided by Supabase
-            data: JSON.stringify(signUpData),
+            ...signUpData,
           },
         ]);
 
@@ -60,6 +61,8 @@ export default async function handler(
           .status(500)
           .json({ error: "Error inserting user data into the database" });
       }
+
+      // You can optionally insert default links or headers here for the user
 
       return res.status(200).json({ user: data.user, session: data.session });
     }

@@ -213,7 +213,8 @@ export const LoginComponent: React.FC<{
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
           onPress={()=>{handleOAuth('facebook')}}
-          isIconOnly 
+          isIconOnly
+          isDisabled
         >
           <AppIcon icon="Facebook" />
         </Button>

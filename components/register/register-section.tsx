@@ -159,7 +159,8 @@ export const RegisterComponent: React.FC<{
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
-          isIconOnly 
+          isIconOnly
+          isDisabled
         >
           <AppIcon icon="Facebook" />
         </Button>

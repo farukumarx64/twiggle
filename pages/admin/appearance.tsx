@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 export default function Appearance() {
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [userData, setUserData] = useState();
+  const [userID, setUserID] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,6 +32,8 @@ export default function Appearance() {
           router.push("/login");
         } else {
           console.log(response.data.session)
+          console.log(response.data.session.id)
+          setUserID(response.data.session.id)
           setUserData(response.data.session.user_metadata)
         }
       } catch (error) {
@@ -45,7 +48,7 @@ export default function Appearance() {
       <Head icon="logo-alt" title="Twiggle Admin" />
       <Navbar option="Appearance" userData={userData} />
       <div className="flex">
-        <AppearanceSection />
+        <AppearanceSection userID={userID} />
         {isWideScreen && <Preview />}
       </div>
     </>

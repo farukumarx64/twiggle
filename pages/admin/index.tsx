@@ -30,7 +30,7 @@ export default function AdminPage() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          console.log(response.data.session)
+          console.log(response.data)
           setUserData(response.data.session.user_metadata)
         }
       } catch (error) {
