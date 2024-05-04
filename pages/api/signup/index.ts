@@ -42,8 +42,8 @@ export default async function handler(
       const signUpData = {
         username: request.username,
         fullname: request.fullname,
-        profile_pic_url: null, // You can update this later
-        bio: null, // You can update this later
+        profile_pic_url: '', // You can update this later
+        bio: '', // You can update this later
         // Other user data
       };
       const { data: userData, error: userError } = await supabase
