@@ -71,8 +71,8 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
     console.log(file);
     if (file) {
       try {
-        const extension = file.name.split(".").pop(); // Extract file extension
-        const newName = profileTitle.replace(/\s+/g, "-"); // Set the new file name here
+        const extension = "png"; //file.name.split(".").pop(); // Extract file extension
+        const newName = "avatar"; // Set the new file name here // profileTitle.replace(/\s+/g, "-")
         const newFileName = `${newName}.${extension}`; // Combine new file name with original extension
 
         // Delete the existing file
@@ -80,7 +80,7 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
           const { data: deleteData, error: deleteError } =
             await supabase.storage
               .from("avatars")
-              .remove([`${userID}/${avatar}`]);
+              .remove([`${userID}/avatar.png`]);
 
           if (deleteError) {
             throw deleteError;
@@ -129,7 +129,7 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
       console.log(userID, avatar);
       const { data, error } = await supabase.storage
         .from("avatars")
-        .remove([avatar]);
+        .remove([`${userID}/avatar.png`]);
 
       if (error) {
         throw error;
