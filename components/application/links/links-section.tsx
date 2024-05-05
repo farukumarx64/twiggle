@@ -19,7 +19,6 @@ interface LinksProps {
 
 export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
   const [contents, setContents] = useState<HeaderCardProps[]>([]);
-  const [count, setCount] = useState(0);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const supabase = createClient();
@@ -33,17 +32,22 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
           .select()
           .eq("user_id", userID); // Correct
 
-        if(error) {
+        if (error) {
           console.error("Error fetching user header:", error);
+        } else {
+          console.log(data);
+          data.forEach((content) => {
+            setContents((prevContents) => [
+              ...prevContents,
+              {
+                header: content.content,
+                id: content.header_id,
+                active: content.active,
+                link: false,
+              },
+            ]);
+          });
         }
-        else {
-          console.log(data)
-          data.forEach(content => {
-            setContents((prevContents) => [...prevContents, {header: content.content, id: content.header_id, active: true, link: false}])
-          })
-        }
-
-        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -61,16 +65,16 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       active: true,
       link: false,
     };
-    setCount(count + 1);
+    const newIndex = contents.length; // Index of the newly added header
     setContents((prevContents) => [...prevContents, newHeader]);
     dispatch(addUserHeader([...user.header, newHeader])); // Dispatch action to add header
-    uploadHeader(id)
+    uploadHeader(id, newIndex);
   };
 
-  const uploadHeader = async (id: string) => {
+  const uploadHeader = async (id: string, index: number) => {
     const { error } = await supabase
       .from("headers")
-      .insert({ header_id: id, user_id: userID, content: "" });
+      .insert({ header_id: id, user_id: userID, content: "", position: index });
     if (error) {
       console.error("Error uploading header", error);
     } else {
@@ -80,8 +84,9 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
 
   const deleteHeader = async (id: string) => {
     const { error } = await supabase
-      .from("headers").delete()
-      .eq('header_id', id)
+      .from("headers")
+      .delete()
+      .eq("header_id", id);
     if (error) {
       console.error("Error deleting header", error);
     } else {
@@ -97,7 +102,6 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       active: true,
       link: true,
     };
-    setCount(count + 1);
     setContents((prevContents) => [...prevContents, newLink]);
     dispatch(addUserLink([...user.header, newLink])); // Dispatch action to add link
   };
@@ -108,13 +112,38 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     setContents(items);
+
+    // Update position in state or send to backend
+    const updatedPositions = items.map((item, index) => ({
+      header_id: item.id,
+      position: index,
+    }));
+    console.log(updatedPositions);
+
+    // Example of sending positions to backend
+    sendPositionsToBackend(updatedPositions);
+  };
+
+  const sendPositionsToBackend = async (
+    positions: { header_id: string; position: number }[]
+  ) => {
+    try {
+      const { error } = await supabase.from("headers").upsert(positions);
+      if (error) {
+        console.error("Error updating positions:", error);
+      } else {
+        console.log("Positions updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating positions:", error);
+    }
   };
 
   const handleDelete = (id: string) => {
     setContents((prevContents) =>
       prevContents.filter((item) => item.id !== id)
     );
-    deleteHeader(id)
+    deleteHeader(id);
   };
 
   const handleHeaderCardStateChange = (updatedState: HeaderCardProps) => {
