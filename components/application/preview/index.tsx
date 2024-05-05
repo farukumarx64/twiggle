@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 export const Preview = () => {
   const [scaleFactor, setScaleFactor] = useState(100);
   const user = useSelector((state: RootState) => state.user);
-  console.log(user);
+  // console.log(user);
 
   useEffect(() => {
     function updateScaleFactor() {

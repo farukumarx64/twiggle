@@ -1,4 +1,5 @@
 import { updateUserInfo } from "@/utils/state/actions/userActions";
+import { createClient } from "@/utils/supabase/components";
 import { Input, Switch } from "@nextui-org/react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -21,6 +22,7 @@ export const HeaderCard: React.FC<{
 }> = ({ state, setState, onDelete }) => {
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
   const dispatch = useDispatch();
+  const supabase = createClient();
 
   const handleHeaderClick = () => {
     setIsReadOnly(false);
@@ -32,10 +34,38 @@ export const HeaderCard: React.FC<{
       ...state,
       header: event.target.value,
     });
-    dispatch(updateUserInfo({header: [state] }))
+    dispatch(updateUserInfo({ header: [state] }));
+    updateHeaderContent(state.id, event.target.value);
+  };
+
+  const updateHeaderContent = async (id: string, header: string) => {
+    const { error } = await supabase
+      .from("headers")
+      .update({ content: header })
+      .eq("header_id", id);
+
+    if (error) {
+      console.error("Error updating header content", error);
+    } else {
+      console.log("header content successfully updated");
+    }
+  };
+
+  const updateHeaderActive = async (id: string, isActive: boolean) => {
+    const { error } = await supabase
+      .from("headers")
+      .update({ active: isActive })
+      .eq("header_id", id);
+
+    if (error) {
+      console.error("Error updating header active", error);
+    } else {
+      console.log("header active successfully updated");
+    }
   };
 
   const handleActive = () => {
+    updateHeaderActive(state.id, !state.active)
     setState({
       ...state,
       active: !state.active,
@@ -51,7 +81,7 @@ export const HeaderCard: React.FC<{
         <i className="ri-draggable"></i>
       </div>
       <div>
-      {state.link === true && (
+        {state.link === true && (
           <Input
             placeholder={state.metadata ? state.metadata : "No site info"}
             className="text-default-500"
@@ -80,11 +110,7 @@ export const HeaderCard: React.FC<{
               ? "Headline title"
               : "link here"
           }
-          value={
-            state.header !== undefined
-              ? state.header
-              : undefined
-          }
+          value={state.header !== undefined ? state.header : undefined}
           className="text-default-500"
           classNames={{
             inputWrapper: [

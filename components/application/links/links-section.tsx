@@ -1,5 +1,5 @@
 import { Button, Divider } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeaderCard, HeaderCardProps } from "./links-card";
 import {
   DragDropContext,
@@ -11,12 +11,46 @@ import { v4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserHeader, addUserLink } from "@/utils/state/actions/userActions";
 import { RootState } from "@/utils/state/reducers/reducers";
+import { createClient } from "@/utils/supabase/components";
 
-export const LinksSection = () => {
+interface LinksProps {
+  userID: string;
+}
+
+export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
   const [contents, setContents] = useState<HeaderCardProps[]>([]);
   const [count, setCount] = useState(0);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const supabase = createClient();
+
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    const fetchHeaderData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("headers")
+          .select()
+          .eq("user_id", userID); // Correct
+
+        if(error) {
+          console.error("Error fetching user header:", error);
+        }
+        else {
+          console.log(data)
+          data.forEach(content => {
+            setContents((prevContents) => [...prevContents, {header: content.content, id: content.header_id, active: true, link: false}])
+          })
+        }
+
+        
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchHeaderData();
+  }, [supabase, userID]);
 
   const handleAddHeader = () => {
     const id = v4();
@@ -30,6 +64,29 @@ export const LinksSection = () => {
     setCount(count + 1);
     setContents((prevContents) => [...prevContents, newHeader]);
     dispatch(addUserHeader([...user.header, newHeader])); // Dispatch action to add header
+    uploadHeader(id)
+  };
+
+  const uploadHeader = async (id: string) => {
+    const { error } = await supabase
+      .from("headers")
+      .insert({ header_id: id, user_id: userID, content: "" });
+    if (error) {
+      console.error("Error uploading header", error);
+    } else {
+      console.log("Header uploaded successfully");
+    }
+  };
+
+  const deleteHeader = async (id: string) => {
+    const { error } = await supabase
+      .from("headers").delete()
+      .eq('header_id', id)
+    if (error) {
+      console.error("Error deleting header", error);
+    } else {
+      console.log("Header deleted successfully");
+    }
   };
 
   const handleAddLink = () => {
@@ -57,6 +114,7 @@ export const LinksSection = () => {
     setContents((prevContents) =>
       prevContents.filter((item) => item.id !== id)
     );
+    deleteHeader(id)
   };
 
   const handleHeaderCardStateChange = (updatedState: HeaderCardProps) => {

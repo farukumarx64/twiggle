@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 export default function AdminPage() {
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [userData, setUserData] = useState();
+  const [userID, setUserID] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,6 +32,7 @@ export default function AdminPage() {
           router.push("/login");
         } else {
           console.log(response.data)
+          setUserID(response.data.session.id)
           setUserData(response.data.session.user_metadata)
         }
       } catch (error) {
@@ -46,7 +48,7 @@ export default function AdminPage() {
       <Head icon="logo-alt" title="Twiggle Admin" />
       <Navbar option="Links" userData={userData} />
       <div className="flex">
-        <LinksSection />
+        <LinksSection userID={userID} />
         {isWideScreen && <Preview />}
       </div>
     </div>
