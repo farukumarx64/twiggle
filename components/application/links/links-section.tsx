@@ -43,7 +43,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
                 header: content.content,
                 id: content.header_id,
                 active: content.active,
-                link: false,
+                link: content.isLink,
               },
             ]);
           });
@@ -68,13 +68,19 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
     const newIndex = contents.length; // Index of the newly added header
     setContents((prevContents) => [...prevContents, newHeader]);
     dispatch(addUserHeader([...user.header, newHeader])); // Dispatch action to add header
-    uploadHeader(id, newIndex);
+    uploadHeader(id, newIndex, false);
   };
 
-  const uploadHeader = async (id: string, index: number) => {
+  const uploadHeader = async (id: string, index: number, isLink: boolean) => {
     const { error } = await supabase
       .from("headers")
-      .insert({ header_id: id, user_id: userID, content: "", position: index });
+      .insert({
+        header_id: id,
+        user_id: userID,
+        content: "",
+        position: index,
+        isLink: isLink,
+      });
     if (error) {
       console.error("Error uploading header", error);
     } else {
@@ -102,8 +108,10 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       active: true,
       link: true,
     };
+    const newIndex = contents.length; // Index of the newly added header
     setContents((prevContents) => [...prevContents, newLink]);
     dispatch(addUserLink([...user.header, newLink])); // Dispatch action to add link
+    uploadHeader(id, newIndex, true);
   };
 
   const handleSort = (result: DropResult) => {

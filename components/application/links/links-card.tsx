@@ -65,7 +65,7 @@ export const HeaderCard: React.FC<{
   };
 
   const handleActive = () => {
-    updateHeaderActive(state.id, !state.active)
+    updateHeaderActive(state.id, !state.active);
     setState({
       ...state,
       active: !state.active,
@@ -93,10 +93,9 @@ export const HeaderCard: React.FC<{
               innerWrapper: "bg-transparent",
               input: "max-w-full",
             }}
-            isReadOnly={isReadOnly}
+            isReadOnly
             onClick={handleHeaderClick}
             onChange={handleChange}
-            endContent={isReadOnly ? <i className="ri-edit-2-line"></i> : ""}
             onFocusChange={() => {
               setIsReadOnly(true);
             }}
