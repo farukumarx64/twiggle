@@ -7,10 +7,11 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
 import NextLink from "next/link";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import React from "react";
 import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
 
@@ -20,7 +21,9 @@ export interface RegisterState {
   value: string;
   legal: string;
 }
-export type SetRegisterState = React.Dispatch<React.SetStateAction<RegisterState>>;
+export type SetRegisterState = React.Dispatch<
+  React.SetStateAction<RegisterState>
+>;
 
 export const RegisterComponent: React.FC<{
   state: RegisterState;
@@ -97,7 +100,6 @@ export const RegisterComponent: React.FC<{
           className="max-w-3xl md:max-w-xl"
           classNames={{
             input: "!pl-[2px] text-sm",
-            
           }}
         />
         <Button
@@ -109,7 +111,9 @@ export const RegisterComponent: React.FC<{
           className=" box-content px-0 max-w-3xl md:max-w-xl"
           onPress={() => {
             handleComponentChange("register-password");
-            dispatch(updateSignUpInfo({email: state.value, username: state.username }))
+            dispatch(
+              updateSignUpInfo({ email: state.value, username: state.username })
+            );
           }}
         >
           Create account
@@ -143,16 +147,6 @@ export const RegisterComponent: React.FC<{
       </div>
       <div className="flex justify-center my-3 text-default-500">OR</div>
       <div className="flex gap-3 items-center justify-center">
-      <Button
-          radius="lg"
-          size="lg"
-          variant="ghost"
-          fullWidth
-          className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
-          isIconOnly 
-        >
-          <AppIcon icon="Google" />
-        </Button>
         <Button
           radius="lg"
           size="lg"
@@ -160,10 +154,21 @@ export const RegisterComponent: React.FC<{
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
           isIconOnly
-          isDisabled
         >
-          <AppIcon icon="Facebook" />
+          <AppIcon icon="Google" />
         </Button>
+        <Tooltip content="I'm not working yet :)">
+          <Button
+            radius="lg"
+            size="lg"
+            variant="ghost"
+            fullWidth
+            className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+            isIconOnly
+          >
+            <AppIcon icon="Facebook" />
+          </Button>
+        </Tooltip>
       </div>
       <div className="flex justify-center mt-8">
         <p className="text-default-500">Already have an account?&nbsp;</p>

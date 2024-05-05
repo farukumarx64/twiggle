@@ -2,7 +2,7 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
 import { updateLoginInfo } from "@/utils/state/actions/loginActions";
 import { RootState } from "@/utils/state/reducers/reducers";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -206,18 +206,18 @@ export const LoginComponent: React.FC<{
         >
           <AppIcon icon="Google" />
         </Button>
-        <Button
-          radius="lg"
-          size="lg"
-          variant="ghost"
-          fullWidth
-          className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
-          onPress={()=>{handleOAuth('facebook')}}
-          isIconOnly
-          isDisabled
-        >
-          <AppIcon icon="Facebook" />
-        </Button>
+        <Tooltip content="I'm not working yet :)">
+          <Button
+            radius="lg"
+            size="lg"
+            variant="ghost"
+            fullWidth
+            className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
+            isIconOnly
+          >
+            <AppIcon icon="Facebook" />
+          </Button>
+        </Tooltip>
       </div>
       <div className="flex justify-center mt-8">
         <p className="text-default-500">Don&apos;t have an account?&nbsp;</p>
