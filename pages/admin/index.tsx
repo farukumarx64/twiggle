@@ -2,6 +2,7 @@ import { LinksSection } from "+/application/links/links-section";
 import { Navbar } from "+/application/navbar";
 import { Preview } from "+/application/preview";
 import { Head } from "@/layouts/head";
+import { createClient } from "@/utils/supabase/components";
 import axios from "axios";
 import router from "next/router";
 import { useState, useEffect } from "react";
@@ -10,6 +11,7 @@ export default function AdminPage() {
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [userData, setUserData] = useState();
   const [userID, setUserID] = useState('');
+  const supabase = createClient();
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,9 +33,17 @@ export default function AdminPage() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          console.log(response.data)
+          console.log(response.data,response.data.session.id, typeof response.data.session.id)
           setUserID(response.data.session.id)
-          setUserData(response.data.session.user_metadata)
+          const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("user_id", response.data.session.id);
+          setUserData(data?.[0])
+
+          if (error) {
+            console.error("Error fetching user data in links navbar", error)
+          }
         }
       } catch (error) {
         console.error("Error checking login status:", error);
@@ -41,12 +51,12 @@ export default function AdminPage() {
     };
 
     checkLoggedIn();
-  }, []); // Run once when component mounts
+  }, [supabase]); // Run once when component mounts
 
   return (
     <div>
       <Head icon="logo-alt" title="Twiggle Admin" />
-      <Navbar option="Links" userData={userData} />
+      <Navbar option="Links" userID={userID} />
       <div className="flex">
         <LinksSection userID={userID} />
         {isWideScreen && <Preview />}

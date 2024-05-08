@@ -18,6 +18,7 @@ interface AccountProps {
 export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
   const supabase = createClient();
   const [profileTitle, setProfileTitle] = useState("");
+  const [profileEmail, setProfileEmail] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
         if (data && data.length > 0) {
           console.log(data);
           setProfileTitle(data[0].fullname || "");
+          setProfileEmail(data[0].email || "");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -40,6 +42,22 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
 
     fetchUserData();
   }, [supabase, userID]);
+
+  /*useEffect(() => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event == "PASSWORD_RECOVERY") {
+        const newPassword = prompt(
+          "What would you like your new password to be?"
+        );
+        const { data, error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (data) alert("Password updated successfully!");
+        if (error) alert("There was an error updating your password.");
+      }
+    });
+  }, [supabase.auth]);*/
 
   const handleProfileTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProfileTitle(e.target.value);
@@ -58,6 +76,40 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
     } catch (error) {
       console.log("Error changing username", error);
     }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      const { data, error } = await supabase.auth.admin.deleteUser(userID);
+      if (error) {
+        console.error("Error deleting user", error);
+      } else {
+        const { error } = await supabase
+          .from("headers")
+          .delete()
+          .eq("user_id", userID);
+        if (error) {
+          console.error("Error deleting user headers", error);
+        } else {
+          const { error } = await supabase
+            .from("users")
+            .delete()
+            .eq("user_id", userID);
+          if (error) {
+            console.error("Error deleting user in users", error);
+          }
+        }
+        console.log(data);
+      }
+    } catch (error) {
+      console.error("Error deleting user", error);
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(
+      profileEmail
+    );
   };
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
@@ -134,16 +186,37 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
                     </div>
                     <i className="ri-close-large-line"></i>
                   </div>
-                  <div className="px-7 mt-2">This action is permanent. Please be certain you want to delete this account.</div>
+                  <div className="px-7 mt-2">
+                    This action is permanent. Please be certain you want to
+                    delete this account.
+                  </div>
                 </div>
-                <span className="text-default-500 mt-5 mb-10 text-justify">If you continue, your Twiggle account, all the content you own and all your data will be permanently deleted. Visitors will no longer be able to see your Twiggle.</span>
+                <span className="text-default-500 mt-5 mb-10 text-justify">
+                  If you continue, your Twiggle account, all the content you own
+                  and all your data will be permanently deleted. Visitors will
+                  no longer be able to see your Twiggle.
+                </span>
               </ModalBody>
               <ModalFooter>
                 <div className="w-full flex gap-5">
-                <Button color="danger" variant="ghost" fullWidth radius="full" size="lg">
-                  Delete
-                </Button>
-                <Button onPress={onClose} variant="ghost" fullWidth radius="full" size="lg">Cancel</Button>
+                  <Button
+                    color="danger"
+                    variant="ghost"
+                    fullWidth
+                    radius="full"
+                    size="lg"
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    onPress={onClose}
+                    variant="ghost"
+                    fullWidth
+                    radius="full"
+                    size="lg"
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </ModalFooter>
             </>

@@ -45,7 +45,7 @@ export default function Account() {
   return (
     <>
       <Head icon="logo-alt" title="Twiggle Admin" />
-      <Navbar option="Appearance" userData={userData} />
+      <Navbar option="Appearance" userID={userID} />
       <div className="flex">
         <AccountSection userID={userID} />
       </div>

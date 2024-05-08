@@ -8,7 +8,7 @@ import router from "next/router";
 
 export default function Settings() {
   const [isWideScreen, setIsWideScreen] = useState(false);
-  const [userData, setUserData] = useState();
+  const [userID, setUserID] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,7 +31,7 @@ export default function Settings() {
           router.push("/login");
         } else {
           console.log(response.data.session)
-          setUserData(response.data.session.user_metadata)
+          setUserID(response.data.session.id)
         }
       } catch (error) {
         console.error("Error checking login status:", error);
@@ -43,7 +43,7 @@ export default function Settings() {
   return (
     <>
       <Head icon="logo-alt" title="Twiggle Admin" />
-      <Navbar option="Settings" userData={userData} />
+      <Navbar option="Settings" userID={userID} />
       <div className="flex">
         <SettingSection />
         {isWideScreen && <Preview />}

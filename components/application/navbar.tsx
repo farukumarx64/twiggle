@@ -13,24 +13,65 @@ import {
   DropdownSection,
   User,
   NavbarMenuToggle,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  Textarea,
 } from "@nextui-org/react";
 
 import NextLink from "next/link";
 
-
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import router from "next/router";
+import { createClient } from "@/utils/supabase/components";
 
 interface NavbarProps {
   option: string;
-  userData: any;
+  userID: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
+export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
   const { theme, setTheme } = useTheme();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [profileTitle, setProfileTitle] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [username, setUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [feedbackContent, setFeedbackContent] = useState("");
+  const [feedbackSuccess, setFeedbackSuccess] = useState<any>(undefined);
+  const supabase = createClient();
+
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("user_id", userID); // Correct
+
+        if (data && data.length > 0) {
+          console.log(data);
+          setProfileTitle(data[0].fullname || "");
+          setAvatar(data[0].profile_pic_url || "");
+          setUsername(data[0].username);
+          setAvatarUrl(
+            `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data[0].profile_pic_url}`
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [supabase, userID]);
   const handleSignOut = async () => {
     try {
       await axios.post("/api/signout");
@@ -41,8 +82,24 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
     }
   };
 
-  const getUser = async () => {
-    console.log(userData)
+  const sendFeedback = async () => {
+    const { error } = await supabase.from("feedback").insert({
+      user_id: userID,
+      content: feedbackContent,
+    });
+    if (error) {
+      console.error("Error sending feedback", error);
+      setFeedbackSuccess(false);
+    } else {
+      console.log("Feedback sent successfully");
+      setFeedbackContent("");
+      setFeedbackSuccess(true);
+    }
+  };
+
+  const handleFeedbackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setFeedbackContent(e.target.value);
   };
 
   return (
@@ -133,7 +190,13 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
         <NavbarItem className="hidden sm:flex gap-2">
           <Dropdown>
             <DropdownTrigger>
-              <Avatar isBordered name="User" as="button" />
+              <Avatar
+                isBordered
+                name={profileTitle[0]?.toUpperCase() || "@"}
+                as="button"
+                className="bg-black text-white"
+                src={avatarUrl}
+              />
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Static Actions"
@@ -142,15 +205,22 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
             >
               <DropdownItem isReadOnly key="user" className="w-80 opacity-100">
                 <User
-                  name={`@${userData?.fullname?.replace(/\b\w/g, (c: string) => c.toUpperCase()) || userData?.full_name || ''}`}
-                  description={`twgl.link/${userData?.username}`}
+                  name={`@${
+                    profileTitle.replace(/\b\w/g, (c: string) =>
+                      c.toUpperCase()
+                    ) ||
+                    profileTitle ||
+                    ""
+                  }`}
+                  description={`twgl.link/${username}`}
                   classNames={{
                     name: "font-semibold mb-1 ml-2",
                     description: "text-default-500 ml-2",
                   }}
                   avatarProps={{
                     size: "md",
-                    src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                    src: avatarUrl,
+                    className: "bg-black text-white",
                   }}
                 />
               </DropdownItem>
@@ -165,7 +235,9 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
                   key="my-account"
                   className="w-80"
                   startContent={<i className="ri-account-box-line text-xl"></i>}
-                  onClick={getUser}
+                  onClick={() => {
+                    router.push("/admin/account");
+                  }}
                 >
                   <span className="text-md ml-4">My account</span>
                 </DropdownItem>
@@ -181,6 +253,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
                   key="submit-feedback"
                   className="w-80"
                   startContent={<i className="ri-feedback-line text-xl"></i>}
+                  onPress={() => {
+                    setFeedbackSuccess(undefined);
+                    onOpen();
+                  }}
                 >
                   <span className="text-md ml-4">Submit feedback</span>
                 </DropdownItem>
@@ -234,7 +310,13 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
         </Button>
         <Dropdown>
           <DropdownTrigger>
-            <Avatar isBordered name="User" as="button" />
+            <Avatar
+              isBordered
+              name={profileTitle[0]?.toUpperCase() || "@"}
+              as="button"
+              className="bg-black text-white"
+              src={avatarUrl}
+            />
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Static Actions"
@@ -243,15 +325,21 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
           >
             <DropdownItem isReadOnly key="user" className="w-60 opacity-100">
               <User
-                name={`@${userData?.fullname?.replace(/\b\w/g, (c: string) => c.toUpperCase())  || userData?.full_name || ''}`}
-                description={`twgl.link/${userData?.username}`}
+                name={`@${
+                  profileTitle.replace(/\b\w/g, (c: string) =>
+                    c.toUpperCase()
+                  ) ||
+                  profileTitle ||
+                  ""
+                }`}
+                description={`twgl.link/${username}`}
                 classNames={{
                   name: "font-semibold mb-1 ml-2",
                   description: "text-default-500 ml-2",
                 }}
                 avatarProps={{
                   size: "md",
-                  src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                  src: avatarUrl,
                 }}
               />
             </DropdownItem>
@@ -266,7 +354,9 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
                 key="my-account"
                 className="w-60"
                 startContent={<i className="ri-account-box-line text-xl"></i>}
-                onClick={getUser}
+                onClick={() => {
+                  router.push("/admin/account");
+                }}
               >
                 <span className="text-md ml-4">My account</span>
               </DropdownItem>
@@ -282,6 +372,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
                 key="submit-feedback"
                 className="w-60"
                 startContent={<i className="ri-feedback-line text-xl"></i>}
+                onPress={() => {
+                  setFeedbackSuccess(undefined);
+                  onOpen();
+                }}
               >
                 <span className="text-md ml-4">Submit feedback</span>
               </DropdownItem>
@@ -302,6 +396,63 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userData }) => {
         </Dropdown>
         <NavbarMenuToggle />
       </NavbarContent>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-center">
+                Submit a feedback
+              </ModalHeader>
+              <ModalBody>
+                <span className="text-default-500 mt-5 mb-3 text-justify">
+                  Please tell us your concerns! There is no wrong feedback.
+                </span>
+                <Textarea
+                  placeholder="Type here..."
+                  value={feedbackContent}
+                  className="col-span-12 md:col-span-6 mb-6 md:mb-3"
+                  onChange={handleFeedbackChange}
+                  autoFocus
+                />
+                {feedbackSuccess === true && (
+                  <span className="text-success-600">
+                    Your feedback has been sent!
+                  </span>
+                )}
+                {feedbackSuccess === false && (
+                  <span className="text-danger-600">
+                    Error sending feedback! Please try again!
+                  </span>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <div className="w-full flex gap-5">
+                  <Button
+                    color="success"
+                    variant="ghost"
+                    fullWidth
+                    radius="full"
+                    size="lg"
+                    onPress={sendFeedback}
+                  >
+                    Send
+                  </Button>
+                  <Button
+                    onPress={onClose}
+                    variant="ghost"
+                    fullWidth
+                    radius="full"
+                    size="lg"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
 
       <NavbarMenu>
         <NavbarContent
