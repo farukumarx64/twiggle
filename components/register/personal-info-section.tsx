@@ -25,6 +25,7 @@ export const PersonalInfoComponent: React.FC<{
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.signup);
   const [loading, setLoading] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState<any>(undefined);
   // ... code for the personal information component
   const isPersonalInfoButtonDisabled = !state.userName || !state.activeCategory;
   const handleCategoryChange = (id: string) => {
@@ -67,7 +68,6 @@ export const PersonalInfoComponent: React.FC<{
   const handleContinue = async () => {
     setLoading(true);
     try {
-
       const response = await axios.post("/api/signup", {
         email: user.email, // Add email parameter if required
         password: user.password, // Add password parameter if required
@@ -82,9 +82,10 @@ export const PersonalInfoComponent: React.FC<{
 
       // Navigate to the next step/component
       handleComponentChange("confirmation");
-    } catch (error) {
+    } catch (error: any) {
       // Handle error response
-      console.error("Error:", error);
+      console.error("Error signing up:", error.response.data.error);
+      setSignUpSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -166,6 +167,11 @@ export const PersonalInfoComponent: React.FC<{
           )}
         </div>
         <div className="flex flex-col justify-center items-center gap-10">
+          {signUpSuccess === false && (
+            <span className="text-danger-600">
+              Error signing up! Please try again!
+            </span>
+          )}
           <Button
             radius="full"
             size="lg"

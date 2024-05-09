@@ -2,6 +2,7 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "+/icons";
 import { AppIcon } from "+/icons/Icon";
 import { updateLoginInfo } from "@/utils/state/actions/loginActions";
 import { RootState } from "@/utils/state/reducers/reducers";
+import { createClient } from "@/utils/supabase/components";
 import { Button, Input, Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import NextLink from "next/link";
@@ -24,7 +25,10 @@ export const LoginComponent: React.FC<{
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
   const dispatch = useDispatch();
+  const supabase = createClient();
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState<any>(undefined);
   const user = useSelector((state: RootState) => state.login);
   const router = useRouter();
   const isButtonDisabled = !state.email || !state.password;
@@ -76,35 +80,58 @@ export const LoginComponent: React.FC<{
 
   const handleLogin = async () => {
     setLoading(true);
-    try {
-      const response = await axios.post("/api/login", {
-        email: user.username, // Add email parameter
-        password: user.password, // Add password parameter
-      });
-
-      // Handle success response
-      console.log("Response:", response.data);
-      const { session } = response.data;
-      console.log(
-        "Access Token: ",
-        session.access_token,
-        "\nRefresh Token: ",
-        session.refresh_token
-      );
-      router.push("/admin");
-    } catch (error) {
-      // Handle error response
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
+    if (user.email === false) {
+      const { data, error } = await supabase
+        .from("users")
+        .select()
+        .eq("username", user.username); // Correct
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(data[0].email);
+        try {
+          const response = await axios.post("/api/login", {
+            email: data[0].email, // Add email parameter
+            password: user.password, // Add password parameter
+          });
+    
+          // Handle success response
+          console.log("Response:", response.data);
+          router.push("/admin");
+        } catch (error: any) {
+          // Handle error response
+          console.error("Error:", error);
+          setLoginSuccess(error.response.data.error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    } else {
+      try {
+        const response = await axios.post("/api/login", {
+          email: user.username, // Add email parameter
+          password: user.password, // Add password parameter
+        });
+  
+        // Handle success response
+        console.log("Response:", response.data);
+        router.push("/admin");
+      } catch (error: any) {
+        // Handle error response
+        console.error("Error:", error);
+        setLoginSuccess(error.response.data.error);
+      } finally {
+        setLoading(false);
+      }
+    };
     }
-  };
+    
   const handleOAuth = async (provider: string) => {
     setLoading(true);
     try {
       const response = await axios.post("/api/login/oauth", {
         provider: provider,
-        url: window.location.origin
+        url: window.location.origin,
       });
 
       // Handle success response
@@ -119,17 +146,6 @@ export const LoginComponent: React.FC<{
     }
   };
 
-  const getUser = async () => {
-    try {
-      const response = await axios.post("/api/login/token");
-
-      // Handle success response
-      console.log("Response:", response.data);
-    } catch (error) {
-      // Handle error response
-      console.error("Error:", error);
-    }
-  };
   const toggleVisibility = () =>
     setState((prevInputs) => ({ ...prevInputs, isVisible: !state.isVisible }));
   return (
@@ -192,6 +208,9 @@ export const LoginComponent: React.FC<{
         >
           {loading ? "Loading..." : "Log in"}
         </Button>
+        {loginSuccess && (
+          <span className="text-danger-600 mt-5">{loginSuccess}</span>
+        )}
       </div>
       <div className="flex justify-center my-3 text-default-500">OR</div>
       <div className="flex gap-3 items-center justify-center">
@@ -201,8 +220,10 @@ export const LoginComponent: React.FC<{
           variant="ghost"
           fullWidth
           className=" box-content px-0 max-w-3xl bg-white md:max-w-xl"
-          onPress={()=>{handleOAuth('google')}}
-          isIconOnly 
+          onPress={() => {
+            handleOAuth("google");
+          }}
+          isIconOnly
         >
           <AppIcon icon="Google" />
         </Button>

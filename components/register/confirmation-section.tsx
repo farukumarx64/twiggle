@@ -31,10 +31,10 @@ export const ConfirmationComponent: React.FC<{
           <h1 className=" text-3xl font-bold md:text-5xl">
             Thanks for signing up
           </h1>
-          <span className=" text-default-500">
+          {/*<span className=" text-default-500">
             To verify your account, click on the link sent to your inbox
             ({user.email}).
-          </span>
+          </span>*/}
         </div>
         <div className="flex justify-center mt-8">
           <Button

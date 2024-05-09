@@ -40,6 +40,7 @@ export default async function handler(
 
       // Insert user data into Supabase database
       const signUpData = {
+        email: request.email,
         username: request.username,
         fullname: request.fullname,
         profile_pic_url: '', // You can update this later

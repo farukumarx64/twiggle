@@ -12,8 +12,9 @@ import {
 } from "@nextui-org/react";
 import NextLink from "next/link";
 import { useDispatch } from "react-redux";
-import React from "react";
+import React, { useState } from "react";
 import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
+import { createClient } from "@/utils/supabase/components";
 
 export interface RegisterState {
   email: boolean;
@@ -31,8 +32,11 @@ export const RegisterComponent: React.FC<{
   handleComponentChange: (comp: string) => void;
 }> = ({ state, setState, handleComponentChange }) => {
   const dispatch = useDispatch();
+  const supabase = createClient();
   // ... code for the register component
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [emailExists, setEmailExists] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
   const isButtonDisabled = !state.email || !state.username;
 
   const validateEmail = (value: string) =>
@@ -44,26 +48,76 @@ export const RegisterComponent: React.FC<{
     setState((prevInputs: any) => ({ ...prevInputs, legal: button }));
     onOpen();
   };
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
       value: e.target.value,
       email: e.target.value !== "",
     }));
+
+    if (!isInvalid) {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("email", e.target.value); // Correct
+
+        if (data && data.length > 0) {
+          setEmailExists(true);
+          console.log(data);
+        } else {
+          setEmailExists(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUsernameChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
       username: e.target.value,
     }));
+
+    if (e.target.value.length > 2) {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("username", e.target.value); // Correct
+
+        if (data && data.length > 0) {
+          setUsernameExists(true);
+          console.log(data);
+        } else {
+          setUsernameExists(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
   const isInvalid = React.useMemo(() => {
     if (state.value === "") {
       return false;
     }
+    if (emailExists === true) {
+      return true;
+    }
 
     return !validateEmail(state.value);
-  }, [state.value]);
+  }, [emailExists, state.value]);
+
+  const isUsernameInvalid = React.useMemo(() => {
+    if (usernameExists === true) {
+      return true;
+    }
+    if (state.username === "") {
+      return false;
+    }
+  }, [state.username, usernameExists]);
 
   return (
     <div className="pt-10">
@@ -80,7 +134,13 @@ export const RegisterComponent: React.FC<{
           color={
             isInvalid ? "danger" : state.value === "" ? "default" : "success"
           }
-          errorMessage={isInvalid && "Oops! Please enter a valid email."}
+          errorMessage={
+            isInvalid
+              ? emailExists
+                ? "Account already exists"
+                : "Oops! Please enter a valid email."
+              : ""
+          }
           onChange={handleEmailChange}
           radius="md"
           className=" max-w-3xl md:max-w-xl"
@@ -88,6 +148,11 @@ export const RegisterComponent: React.FC<{
         <Input
           placeholder="username"
           value={state.username}
+          isInvalid={isUsernameInvalid}
+          color={
+            isInvalid ? "danger" : state.username === "" ? "default" : state.username.length > 2 ? "success" : "default"
+          }
+          errorMessage={isUsernameInvalid && "Username is already taken :("}
           startContent={
             <div className="pointer-events-none flex items-center">
               <span className="text-base">Twgl.link/</span>
