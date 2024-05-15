@@ -2,7 +2,10 @@ import { Button, Divider, useDisclosure } from "@nextui-org/react";
 import { SocialIcons } from "./social-icons";
 import { PreviewMobile } from "../preview/mobile";
 
-export const SettingSection = () => {
+interface SettingsProps {
+  userID: string;
+}
+export const SettingSection: React.FC<SettingsProps> = ({userID}) => {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
@@ -26,7 +29,7 @@ export const SettingSection = () => {
         >
           <span className="font-bold">Preview</span>
         </Button>
-        {/*<PreviewMobile isOpen={isOpen} onOpenChange={onOpenChange} userID={userID} />*/}
+        <PreviewMobile isOpen={isOpen} onOpenChange={onOpenChange} userID={userID} />
       </div>
     </div>
   );

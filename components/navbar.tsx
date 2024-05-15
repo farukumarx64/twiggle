@@ -8,7 +8,6 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 
-
 import NextLink from "next/link";
 
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -52,18 +51,18 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Button radius="sm" size="lg">
-            <NextLink href="/login" target="_blank">
+          <NextLink href="/login" target="_blank">
+            <Button radius="sm" size="lg">
               Log in
-            </NextLink>
-          </Button>
+            </Button>
+          </NextLink>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
-          <Button color="secondary" radius="full" size="lg">
-            <NextLink href="/register" target="_blank">
+          <NextLink href="/register" target="_blank">
+            <Button color="secondary" radius="full" size="lg">
               Sign up free
-            </NextLink>
-          </Button>
+            </Button>
+          </NextLink>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
@@ -71,16 +70,16 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 gap-2" justify="end">
-        <Button radius="sm" size="lg">
-          <NextLink href="/login" target="_blank">
+        <NextLink href="/login" target="_blank">
+          <Button radius="sm" size="lg">
             Log in
-          </NextLink>
-        </Button>
-        <Button color="secondary" radius="full" size="lg">
-          <NextLink href="/register" target="_blank">
+          </Button>
+        </NextLink>
+        <NextLink href="/register" target="_blank">
+          <Button color="secondary" radius="full" size="lg">
             Sign up free
-          </NextLink>
-        </Button>
+          </Button>
+        </NextLink>
         <NavbarMenuToggle />
       </NavbarContent>
 
