@@ -1,11 +1,13 @@
-import { Button, Divider } from "@nextui-org/react";
+import { Button, Divider, useDisclosure } from "@nextui-org/react";
 import { AppearanceCard } from "./appearance-card";
+import { PreviewMobile } from "../preview/mobile";
 
 interface AppearanceProps {
   userID: string;
 }
 
 export const AppearanceSection: React.FC<AppearanceProps> = ({userID}) => {
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
       <div className="flex flex-col w-full box-content px-4 justify-start items-center mt-28">
@@ -24,9 +26,11 @@ export const AppearanceSection: React.FC<AppearanceProps> = ({userID}) => {
           className="p-6"
           variant="shadow"
           startContent={<i className="ri-eye-line"></i>}
+          onPress={onOpen}
         >
           <span className="font-bold">Preview</span>
         </Button>
+        <PreviewMobile isOpen={isOpen} onOpenChange={onOpenChange} userID={userID} />
       </div>
     </div>
   );

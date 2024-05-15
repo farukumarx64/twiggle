@@ -1,4 +1,4 @@
-import { Button, Divider } from "@nextui-org/react";
+import { Button, Divider, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { HeaderCard, HeaderCardProps } from "./links-card";
 import {
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUserHeader, addUserLink } from "@/utils/state/actions/userActions";
 import { RootState } from "@/utils/state/reducers/reducers";
 import { createClient } from "@/utils/supabase/components";
+import { PreviewMobile } from "../preview/mobile";
 
 interface LinksProps {
   userID: string;
@@ -20,6 +21,7 @@ interface LinksProps {
 export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
   const [contents, setContents] = useState<HeaderCardProps[]>([]);
   const dispatch = useDispatch();
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const user = useSelector((state: RootState) => state.user);
   const supabase = createClient();
 
@@ -62,7 +64,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
     const newHeader = {
       header: "",
       id: id,
-      active: true,
+      active: false,
       link: false,
     };
     const newIndex = contents.length; // Index of the newly added header
@@ -105,7 +107,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
     const newLink = {
       header: "",
       id: id,
-      active: true,
+      active: false,
       link: true,
     };
     const newIndex = contents.length; // Index of the newly added header
@@ -238,9 +240,11 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
           className="p-6"
           variant="shadow"
           startContent={<i className="ri-eye-line"></i>}
+          onPress={onOpen}
         >
           <span className="font-bold">Preview</span>
         </Button>
+        <PreviewMobile isOpen={isOpen} onOpenChange={onOpenChange} userID={userID} />
       </div>
     </div>
   );

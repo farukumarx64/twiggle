@@ -49,7 +49,7 @@ export default function Appearance() {
       <Navbar option="Appearance" userID={userID} />
       <div className="flex">
         <AppearanceSection userID={userID} />
-        {isWideScreen && <Preview />}
+        {isWideScreen && <Preview userID={userID} />}
       </div>
     </>
   );

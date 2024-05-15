@@ -59,7 +59,7 @@ export default function AdminPage() {
       <Navbar option="Links" userID={userID} />
       <div className="flex">
         <LinksSection userID={userID} />
-        {isWideScreen && <Preview />}
+        {isWideScreen && <Preview userID={userID} />}
       </div>
     </div>
   );

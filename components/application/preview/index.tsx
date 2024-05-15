@@ -1,12 +1,18 @@
 import { RootState } from "@/utils/state/reducers/reducers";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { HeaderCardProps } from "../links/links-card";
+import { createClient } from "@/utils/supabase/components";
+import NextLink from "next/link";
+import { PreviewContent } from "./content";
 
-export const Preview = () => {
+interface PreviewProps {
+  userID: string;
+}
+
+export const Preview: React.FC<PreviewProps> = ({userID}) => {
   const [scaleFactor, setScaleFactor] = useState(100);
-  const user = useSelector((state: RootState) => state.user);
-  // console.log(user);
 
   useEffect(() => {
     function updateScaleFactor() {
@@ -26,6 +32,7 @@ export const Preview = () => {
     };
   }, []); // empty dependency array ensures the effect runs only once after mount
 
+
   const scaledStyle = {
     transform: `scale(${scaleFactor})`,
   };
@@ -33,24 +40,10 @@ export const Preview = () => {
     <>
       <section className="hidden md:flex w-1/3 h-[80vh] justify-center items-start mt-20">
         <div
-          className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center"
+          className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
           style={scaledStyle}
         >
-          <div className="w-full">
-            <div className="flex flex-col justify-center items-center w-full">
-              <Avatar
-                name={user.profileTitle[0]?.toUpperCase() || "@"}
-                className="w-20 h-20 text-3xl text-white bg-black mb-2"
-              />
-              <span className="text-black font-bold">
-                {user.profileTitle || "@username"}
-              </span>
-              <span className="text-xs text-default-500">
-                {user.bio || "bio"}
-              </span>
-            </div>
-            {/* Content */}
-          </div>
+          <PreviewContent userID={userID} />
         </div>
       </section>
     </>

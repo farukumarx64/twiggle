@@ -46,7 +46,7 @@ export default function Settings() {
       <Navbar option="Settings" userID={userID} />
       <div className="flex">
         <SettingSection />
-        {isWideScreen && <Preview />}
+        {isWideScreen && <Preview userID={userID} />}
       </div>
     </>
   );
