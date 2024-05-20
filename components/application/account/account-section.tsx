@@ -9,17 +9,22 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ResetPasswordModal } from "./reset-password";
 
 interface AccountProps {
   userID: string;
 }
 
 export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
+  const router = useRouter();
   const supabase = createClient();
   const [profileTitle, setProfileTitle] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const resetPassword = useDisclosure();
 
   useEffect(() => {
     // Fetch user data when the component mounts
@@ -80,27 +85,10 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
 
   const handleDeleteUser = async () => {
     try {
-      const { data, error } = await supabase.auth.admin.deleteUser(userID);
-      if (error) {
-        console.error("Error deleting user", error);
-      } else {
-        const { error } = await supabase
-          .from("headers")
-          .delete()
-          .eq("user_id", userID);
-        if (error) {
-          console.error("Error deleting user headers", error);
-        } else {
-          const { error } = await supabase
-            .from("users")
-            .delete()
-            .eq("user_id", userID);
-          if (error) {
-            console.error("Error deleting user in users", error);
-          }
-        }
-        console.log(data);
-      }
+      const response = await axios.post("/api/user/delete", {id: userID});
+      // Handle success response
+      console.log("Response:", response.data);
+      router.push('/')
     } catch (error) {
       console.error("Error deleting user", error);
     }
@@ -110,6 +98,11 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(
       profileEmail
     );
+    if (error) {
+      console.error(error)
+    } else {
+      console.log(data)
+    }
   };
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
@@ -147,7 +140,7 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
               Reset the password for this account. This will reset the password
               that you own.
             </span>
-            <Button variant="ghost" color="secondary" size="lg" radius="full">
+            <Button variant="ghost" color="secondary" size="lg" radius="full" onPress={resetPassword.onOpen}>
               Reset password
             </Button>
           </div>
@@ -205,6 +198,7 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
                     fullWidth
                     radius="full"
                     size="lg"
+                    onPress={handleDeleteUser}
                   >
                     Delete
                   </Button>
@@ -223,6 +217,7 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
           )}
         </ModalContent>
       </Modal>
+      <ResetPasswordModal isOpen={resetPassword.isOpen} onOpenChange={resetPassword.onOpenChange}/>
     </div>
   );
 };

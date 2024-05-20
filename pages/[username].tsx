@@ -1,4 +1,5 @@
 import { PreviewContent } from "+/application/preview/content";
+import { Head } from "@/layouts/head";
 import { createClient } from "@/utils/supabase/server-props";
 import { Image } from "@nextui-org/react";
 import { GetServerSideProps } from "next";
@@ -6,7 +7,15 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 
 interface UserPageProps {
-  user: string;
+  user: {
+    user_id: string;
+    username: string;
+    fullname: string;
+    profile_pic_url: string;
+    bio: string;
+    email: string;
+
+  };
   error?: string;
 }
 
@@ -28,8 +37,9 @@ const UserPage: React.FC<UserPageProps> = ({ user, error }) => {
 
   return (
     <section className="flex flex-col p-5 h-screen">
+      <Head icon="logo-alt" title={`${user.username}'s Twiggle`} />
       <div className="flex-grow">
-        <PreviewContent userID={user} />
+        <PreviewContent userID={user.user_id} />
       </div>
       <footer className="flex justify-center items-center">
         <span>Powered by</span>
@@ -52,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Fetch user data based on the username
   const { data, error } = await supabase
     .from("users")
-    .select("user_id")
+    .select("*")
     .eq("username", username)
     .single();
 
@@ -68,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      user: data.user_id,
+      user: data,
     },
   };
 };
