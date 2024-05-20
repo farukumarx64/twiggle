@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import { AppIcon } from "./icons/Icon";
 import { HoveredText } from "./hover-text";
+import NextLink from "next/link";
 
 export const Footer = () => {
   const [legal, setLegal] = React.useState("");
@@ -24,27 +25,27 @@ export const Footer = () => {
       <section className="py-20 px-3">
         <div className=" md:px-20 flex justify-around items-center flex-wrap gap-y-8">
           <div className="flex gap-6">
-            <a
+            <NextLink
               href="mailto:f.umaridris.mail@gmail.com"
               target="_blank"
               rel="noreferrer"
             >
               <AppIcon icon="Email" />
-            </a>
-            <a
+            </NextLink>
+            <NextLink
               href="https://twitter.com/farukumar_"
               target="_blank"
               rel="noreferrer noopener"
             >
               <AppIcon icon="Twitter" />
-            </a>
-            <a
+            </NextLink>
+            <NextLink
               href="https://www.linkedin.com/in/faruk-umar-224565194/"
               target="_blank"
               rel="noreferrer noopener"
             >
               <AppIcon icon="LinkedIn" />
-            </a>
+            </NextLink>
           </div>
           <div className="flex justify-center items-center gap-16">
             <div>

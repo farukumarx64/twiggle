@@ -2,7 +2,7 @@ import { title, subtitle } from "@/components/primitives";
 import { Button, Input, Image, Divider } from "@nextui-org/react";
 import newsletter from "#/email/newsletter";
 import { useState } from "react";
-import { CheckIcon } from "./icons/CheckIcon";
+import { CheckIcon } from "../icons/CheckIcon";
 
 export default function Hero() {
   const [email, setEmail] = useState("");
@@ -28,14 +28,12 @@ export default function Hero() {
       setSuccess("empty");
       return;
     }
-    console.log(isEmailValid(email));
     if (isEmailValid(email)) {
       setSuccess("wrong");
       return;
     }
     const isSuccessful = await newsletter(email);
     setSuccess(isSuccessful);
-    console.log(isSuccessful);
     if (isSuccessful === true) {
       setEmail("");
       emailInput !== null ? (emailInput.value = "") : "";
@@ -77,11 +75,19 @@ export default function Hero() {
 
           <div className="flex items-center gap-3 justify-between self-start flex-wrap w-full">
             <Input
-              placeholder="example@mail.com"
+              placeholder="yourname"
+              startContent={
+                <div className="pointer-events-none flex items-center">
+                  <span className="text-base">Twgl.link/</span>
+                </div>
+              }
               size="md"
               onChange={handleChange}
               id="email-input"
               className="w-80"
+              classNames={{
+                input: '!pl-[2px] text-base'
+              }}
             />
 
             <Button
@@ -91,13 +97,22 @@ export default function Hero() {
               onPress={handleSubmit}
               className="max-w-40 box-border mr-14 bg-[#a1acfb]"
             >
-              Get Early Access
+              Craft Your Twiggle
             </Button>
           </div>
           <div className="flex items-center justify-start w-full gap-x-6 gap-y-4 flex-wrap">
-            <div className="flex text-default-500"><CheckIcon />No credit card required.</div>
-            <div className="flex text-default-500"><CheckIcon />Ease of use.</div>
-            <div className="flex text-default-500"><CheckIcon />Free hosting.</div>
+            <div className="flex text-default-500">
+              <CheckIcon />
+              No credit card required.
+            </div>
+            <div className="flex text-default-500">
+              <CheckIcon />
+              Ease of use.
+            </div>
+            <div className="flex text-default-500">
+              <CheckIcon />
+              Free hosting.
+            </div>
           </div>
           <div className="flex w-full">
             {success === true && (
