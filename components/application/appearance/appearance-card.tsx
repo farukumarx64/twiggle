@@ -99,16 +99,16 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
           console.error(error);
           setAvatarUrl(""); // Set avatarUrl to empty string on error
         } else {
-
+          console.log(data)
           // Update profile_pic_url
           await supabase
             .from("users")
-            .update({ profile_pic_url: data?.fullPath })
+            .update({ profile_pic_url: `avatars/${data?.path}` })
             .eq("user_id", userID);
 
           // Update avatarUrl
           setAvatarUrl(
-            `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data?.fullPath}`
+            `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/avatars/${data?.path}`
           );
         }
       } catch (error) {
