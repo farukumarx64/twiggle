@@ -34,7 +34,6 @@ export const LoginComponent: React.FC<{
   const isButtonDisabled = !state.email || !state.password;
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(state.username);
     setState((prevInputs: any) => ({
       ...prevInputs,
       username: e.target.value,
@@ -57,7 +56,6 @@ export const LoginComponent: React.FC<{
   };
   const isEmail = () => {
     if (state.username !== "") {
-      console.log(state.username.includes("@"));
       return state.username.includes("@");
     }
   };
@@ -88,7 +86,6 @@ export const LoginComponent: React.FC<{
       if (error) {
         console.error(error);
       } else {
-        console.log(data[0].email);
         try {
           const response = await axios.post("/api/login", {
             email: data[0].email, // Add email parameter
@@ -96,7 +93,6 @@ export const LoginComponent: React.FC<{
           });
     
           // Handle success response
-          console.log("Response:", response.data);
           router.push("/admin");
         } catch (error: any) {
           // Handle error response
@@ -114,7 +110,6 @@ export const LoginComponent: React.FC<{
         });
   
         // Handle success response
-        console.log("Response:", response.data);
         router.push("/admin");
       } catch (error: any) {
         // Handle error response
@@ -135,7 +130,6 @@ export const LoginComponent: React.FC<{
       });
 
       // Handle success response
-      console.log("Response:", response.data);
       const { url } = response.data;
       router.push(url);
     } catch (error) {

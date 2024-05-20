@@ -28,7 +28,6 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
           .eq("user_id", userID); // Correct
 
         if (data && data.length > 0) {
-          console.log(data);
           setBio(data[0].bio || "");
           setProfileTitle(data[0].fullname || "");
           setAvatar(data[0].profile_pic_url || "");
@@ -68,7 +67,6 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
     if (file) {
       try {
         const extension = "png"; //file.name.split(".").pop(); // Extract file extension
@@ -98,10 +96,9 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
           });
 
         if (error) {
-          console.log(error);
+          console.error(error);
           setAvatarUrl(""); // Set avatarUrl to empty string on error
         } else {
-          console.log(data);
 
           // Update profile_pic_url
           await supabase
@@ -115,7 +112,7 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
           );
         }
       } catch (error) {
-        console.log("Error uploading avatar", error);
+        console.error("Error uploading avatar", error);
         setAvatarUrl(""); // Set avatarUrl to empty string on error
       }
     } else {
@@ -126,7 +123,6 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
   const handleRemoveAvatar = async () => {
     try {
       // Delete the file from storage
-      console.log(userID, avatar);
       const { data, error } = await supabase.storage
         .from("avatars")
         .remove([`${userID}/avatar.png`]);
@@ -148,7 +144,6 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
         throw updateError;
       }
 
-      console.log("Profile pic URL updated successfully:", updateData);
     } catch (error) {
       console.error("Error removing avatar:", error);
     }

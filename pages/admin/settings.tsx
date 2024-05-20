@@ -30,7 +30,6 @@ export default function Settings() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          console.log(response.data.session)
           setUserID(response.data.session.id)
         }
       } catch (error) {

@@ -33,7 +33,6 @@ export const PersonalInfoComponent: React.FC<{
 
   useEffect(() => {
     const getData = () => {
-      console.log(data);
     };
     getData();
   }, [data]);
@@ -53,7 +52,6 @@ export const PersonalInfoComponent: React.FC<{
         category: id,
       })
     );
-    console.log(state);
   };
   const handleActiveSubCategory = (id: string) => {
     setState((prevInputs: any) => ({ ...prevInputs, activeSubCategory: id }));

@@ -57,7 +57,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
           .eq("user_id", userID); // Correct
 
         if (data && data.length > 0) {
-          console.log(data);
           setProfileTitle(data[0].fullname || "");
           setAvatar(data[0].profile_pic_url || "");
           setUsername(data[0].username);
@@ -98,7 +97,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
   };
 
   const handleFeedbackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setFeedbackContent(e.target.value);
   };
 
@@ -267,7 +265,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
                 color="danger"
                 startContent={<i className="ri-logout-box-line text-xl"></i>}
                 onClick={() => {
-                  console.log("man");
                   handleSignOut();
                 }}
               >
@@ -386,7 +383,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
               color="danger"
               startContent={<i className="ri-logout-box-line text-xl"></i>}
               onClick={() => {
-                console.log("man");
                 handleSignOut();
               }}
             >

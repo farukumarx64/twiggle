@@ -26,7 +26,6 @@ export const HeaderCard: React.FC<{
 
   const handleHeaderClick = () => {
     setIsReadOnly(false);
-    console.log(state);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -36,7 +36,6 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
           .eq("user_id", userID); // Correct
 
         if (data && data.length > 0) {
-          console.log(data);
           setProfileTitle(data[0].fullname || "");
           setProfileEmail(data[0].email || "");
         }
@@ -76,32 +75,21 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
         .eq("user_id", userID);
 
       if (error) {
-        console.log("Error changing username", error);
+        console.error("Error changing username", error);
       }
     } catch (error) {
-      console.log("Error changing username", error);
+      console.error("Error changing username", error);
     }
   };
 
   const handleDeleteUser = async () => {
     try {
-      const response = await axios.post("/api/user/delete", {id: userID});
+      const response = await axios.post("/api/user/delete", { id: userID });
       // Handle success response
       console.log("Response:", response.data);
-      router.push('/')
+      router.push("/");
     } catch (error) {
       console.error("Error deleting user", error);
-    }
-  };
-
-  const handleUpdatePassword = async () => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(
-      profileEmail
-    );
-    if (error) {
-      console.error(error)
-    } else {
-      console.log(data)
     }
   };
   return (
@@ -140,7 +128,13 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
               Reset the password for this account. This will reset the password
               that you own.
             </span>
-            <Button variant="ghost" color="secondary" size="lg" radius="full" onPress={resetPassword.onOpen}>
+            <Button
+              variant="ghost"
+              color="secondary"
+              size="lg"
+              radius="full"
+              onPress={resetPassword.onOpen}
+            >
               Reset password
             </Button>
           </div>
@@ -217,7 +211,10 @@ export const AccountSection: React.FC<AccountProps> = ({ userID }) => {
           )}
         </ModalContent>
       </Modal>
-      <ResetPasswordModal isOpen={resetPassword.isOpen} onOpenChange={resetPassword.onOpenChange}/>
+      <ResetPasswordModal
+        isOpen={resetPassword.isOpen}
+        onOpenChange={resetPassword.onOpenChange}
+      />
     </div>
   );
 };

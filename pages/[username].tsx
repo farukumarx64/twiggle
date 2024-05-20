@@ -57,7 +57,6 @@ const UserPage: React.FC<UserPageProps> = ({ user, error }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const supabase = createClient(context);
   const { username } = context.params;
-  console.log(username);
 
   // Fetch user data based on the username
   const { data, error } = await supabase
@@ -74,7 +73,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  console.log(data);
 
   return {
     props: {

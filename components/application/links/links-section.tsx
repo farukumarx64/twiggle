@@ -37,7 +37,6 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
         if (error) {
           console.error("Error fetching user header:", error);
         } else {
-          console.log(data);
           data.forEach((content) => {
             setContents((prevContents) => [
               ...prevContents,
@@ -60,7 +59,6 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
 
   const handleAddHeader = () => {
     const id = v4();
-    console.log(contents, id);
     const newHeader = {
       header: "",
       id: id,
@@ -128,7 +126,6 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       header_id: item.id,
       position: index,
     }));
-    console.log(updatedPositions);
 
     // Example of sending positions to backend
     sendPositionsToBackend(updatedPositions);

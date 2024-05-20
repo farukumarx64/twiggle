@@ -64,7 +64,6 @@ export const RegisterComponent: React.FC<{
 
         if (data && data.length > 0) {
           setEmailExists(true);
-          console.log(data);
         } else {
           setEmailExists(false);
         }
@@ -90,7 +89,6 @@ export const RegisterComponent: React.FC<{
 
         if (data && data.length > 0) {
           setUsernameExists(true);
-          console.log(data);
         } else {
           setUsernameExists(false);
         }

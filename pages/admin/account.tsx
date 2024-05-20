@@ -30,8 +30,6 @@ export default function Account() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          console.log(response.data.session)
-          console.log(response.data.session.id)
           setUserID(response.data.session.id)
           setUserData(response.data.session.user_metadata)
         }

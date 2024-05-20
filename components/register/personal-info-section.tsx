@@ -43,7 +43,6 @@ export const PersonalInfoComponent: React.FC<{
         category: id,
       })
     );
-    console.log(state);
   };
   const handleActiveSubCategory = (id: string) => {
     setState((prevInputs: any) => ({ ...prevInputs, activeSubCategory: id }));
@@ -78,7 +77,6 @@ export const PersonalInfoComponent: React.FC<{
       });
 
       // Handle success response
-      console.log("Response:", response.data);
 
       // Navigate to the next step/component
       handleComponentChange("confirmation");

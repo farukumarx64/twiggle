@@ -76,7 +76,6 @@ export const ResetPasswordModal: React.FC<Props> = ({
       if (error) {
         console.error("Error: error updating password", error)
       } else {
-        console.log(data)
         setPasswordState((prevInputs) => ({
           ...prevInputs,
           password: '',

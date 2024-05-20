@@ -28,14 +28,12 @@ export default function Hero() {
       setSuccess("empty");
       return;
     }
-    console.log(isEmailValid(email));
     if (isEmailValid(email)) {
       setSuccess("wrong");
       return;
     }
     const isSuccessful = await newsletter(email);
     setSuccess(isSuccessful);
-    console.log(isSuccessful);
     if (isSuccessful === true) {
       setEmail("");
       emailInput !== null ? (emailInput.value = "") : "";

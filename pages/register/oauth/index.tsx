@@ -14,7 +14,6 @@ export default function SignUpPage() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      console.log("the response: ", user);
       setData(user);
     };
     checkLoggedIn();

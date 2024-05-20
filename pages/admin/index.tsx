@@ -33,7 +33,6 @@ export default function AdminPage() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          console.log(response.data,response.data.session.id, typeof response.data.session.id)
           setUserID(response.data.session.id)
           const { data, error } = await supabase
           .from("users")
