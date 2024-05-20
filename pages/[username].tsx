@@ -56,13 +56,13 @@ const UserPage: React.FC<UserPageProps> = ({ user, error }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const supabase = createClient(context);
-  const { username } = context.params;
+  const parameters = context.params;
 
   // Fetch user data based on the username
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("username", username)
+    .eq("username", parameters?.username)
     .single();
 
   if (error) {
