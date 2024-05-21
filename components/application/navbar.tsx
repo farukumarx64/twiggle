@@ -18,6 +18,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Snippet,
   useDisclosure,
   Textarea,
 } from "@nextui-org/react";
@@ -100,9 +101,9 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
     setFeedbackContent(e.target.value);
   };
 
-  const handleShareButton = async() => {
+  const handleShareButton = async () => {
     await navigator.clipboard.writeText(`https://twgl.link/${username}`);
-  }
+  };
 
   return (
     <NextUINavbar maxWidth="xl" isBordered>
@@ -179,16 +180,15 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Button
-            radius="full"
+          <Snippet
+            symbol=""
+            variant="flat"
+            color="secondary"
             size="lg"
-            variant="ghost"
-            startContent={<i className="ri-share-line"></i>}
-            className="flex items-center gap-2"
-            onPress={handleShareButton}
+            codeString={`https://twgl.link/${username}`}
           >
-            <span className="font-bold">Share</span>
-          </Button>
+            Share me
+          </Snippet>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
           <Dropdown>
@@ -301,15 +301,15 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
         className="sm:hidden gap-8 w-full justify-between items-center"
         justify="end"
       >
-        <Button
-          radius="full"
+        <Snippet
+          symbol=""
+          variant="flat"
           size="lg"
-          variant="ghost"
-          startContent={<i className="ri-share-line"></i>}
-          className="flex items-center gap-2"
+          color="secondary"
+          codeString={`https://twgl.link/${username}`}
         >
-          <span className="font-bold">Share</span>
-        </Button>
+          Share me
+        </Snippet>
         <Dropdown>
           <DropdownTrigger>
             <Avatar
