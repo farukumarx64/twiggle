@@ -98,6 +98,7 @@ export const HeaderCard: React.FC<{
             onFocusChange={() => {
               setIsReadOnly(true);
             }}
+            autoFocus
           />
         )}
         <Input
@@ -110,6 +111,7 @@ export const HeaderCard: React.FC<{
           }
           value={state.header !== undefined ? state.header : undefined}
           className="text-default-500"
+          autoFocus
           classNames={{
             inputWrapper: [
               "bg-transparent hover:!bg-transparent focus-within:!bg-transparent",
