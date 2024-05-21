@@ -1,7 +1,8 @@
 import { updateUserInfo } from "@/utils/state/actions/userActions";
 import { createClient } from "@/utils/supabase/components";
 import { Input, Switch } from "@nextui-org/react";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 export interface HeaderCardProps {
@@ -24,9 +25,6 @@ export const HeaderCard: React.FC<{
   const dispatch = useDispatch();
   const supabase = createClient();
 
-  const handleHeaderClick = () => {
-    setIsReadOnly(false);
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -93,12 +91,6 @@ export const HeaderCard: React.FC<{
               input: "max-w-full",
             }}
             isReadOnly
-            onClick={handleHeaderClick}
-            onChange={handleChange}
-            onFocusChange={() => {
-              setIsReadOnly(true);
-            }}
-            autoFocus
           />
         )}
         <Input
@@ -111,7 +103,6 @@ export const HeaderCard: React.FC<{
           }
           value={state.header !== undefined ? state.header : undefined}
           className="text-default-500"
-          autoFocus
           classNames={{
             inputWrapper: [
               "bg-transparent hover:!bg-transparent focus-within:!bg-transparent",
@@ -120,13 +111,8 @@ export const HeaderCard: React.FC<{
             innerWrapper: "bg-transparent",
             input: "max-w-full",
           }}
-          isReadOnly={isReadOnly}
-          onClick={handleHeaderClick}
           onChange={handleChange}
           endContent={isReadOnly ? <i className="ri-edit-2-line"></i> : ""}
-          onFocusChange={() => {
-            setIsReadOnly(true);
-          }}
         />
       </div>
       <div className="flex flex-col justify-center gap-5 items-center">
