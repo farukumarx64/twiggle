@@ -1,47 +1,24 @@
 import { title, subtitle } from "@/components/primitives";
 import { Button, Input, Image, Divider } from "@nextui-org/react";
-import newsletter from "#/email/newsletter";
 import { useState } from "react";
 import { CheckIcon } from "../icons/CheckIcon";
+import { useRouter } from "next/router";
 
 export default function Hero() {
-  const [email, setEmail] = useState("");
-  const [success, setSuccess] = useState<any>(null);
+  const [username, setUsername] = useState("");
+  const router = useRouter()
 
-  function isEmailValid(email: string): boolean {
-    // Regular expression for a simple email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function removeSpacing(text: string) {
+    const cleanedUsername = text.replace(/\s/g, "");
 
-    return !emailRegex.test(email);
-  }
-
-  function removeSpacing(email: string) {
-    const cleanedEmail = email.replace(/\s/g, "");
-
-    return cleanedEmail;
+    return cleanedUsername;
   }
   async function handleSubmit() {
-    const emailInput: HTMLInputElement | null = document.getElementById(
-      "email-input"
-    ) as HTMLInputElement | null;
-    if (email === "") {
-      setSuccess("empty");
-      return;
-    }
-    if (isEmailValid(email)) {
-      setSuccess("wrong");
-      return;
-    }
-    const isSuccessful = await newsletter(email);
-    setSuccess(isSuccessful);
-    if (isSuccessful === true) {
-      setEmail("");
-      emailInput !== null ? (emailInput.value = "") : "";
-    }
+    router.push(`/register?username=${username}`)
   }
 
   function handleChange(event: any) {
-    setEmail(removeSpacing(event.target.value.toLowerCase()));
+    setUsername(removeSpacing(event.target.value.toLowerCase()));
   }
   return (
     <>
@@ -113,48 +90,6 @@ export default function Hero() {
               <CheckIcon />
               Free hosting.
             </div>
-          </div>
-          <div className="flex w-full">
-            {success === true && (
-              <div className=" flex flex-wrap">
-                {" "}
-                <p className="text-default-400 italic text-md self-start">
-                  Email submitted successfully!
-                </p>
-              </div>
-            )}
-            {success === false && (
-              <div className=" flex flex-wrap">
-                {" "}
-                <p className="italic text-md self-start text-warning-500">
-                  Email has already subscribed to the newsletter!
-                </p>
-              </div>
-            )}
-            {success === "empty" && (
-              <div className=" flex flex-wrap">
-                {" "}
-                <p className="text-red-500 italic text-md self-start">
-                  Please enter an email!
-                </p>
-              </div>
-            )}
-            {success === "wrong" && (
-              <div className=" flex flex-wrap">
-                {" "}
-                <p className="italic text-md self-start text-warning-500">
-                  Please enter a valid email!
-                </p>
-              </div>
-            )}
-            {success === undefined && (
-              <div className=" flex flex-wrap">
-                {" "}
-                <p className="italic text-md self-start text-issue-red">
-                  There is an issue. Please try again!
-                </p>
-              </div>
-            )}
           </div>
         </div>
         <div className="object-contain flex max-w-3xl">
