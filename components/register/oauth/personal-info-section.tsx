@@ -200,7 +200,7 @@ export const PersonalInfoComponent: React.FC<{
             }
             fullWidth
             className=" box-content px-0 max-w-3xl md:max-w-xl"
-            onClick={() => {
+            onPress={() => {
               handleContinue();
             }}
           >

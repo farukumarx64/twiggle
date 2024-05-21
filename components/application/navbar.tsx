@@ -238,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
                   key="my-account"
                   className="w-80"
                   startContent={<i className="ri-account-box-line text-xl"></i>}
-                  onClick={() => {
+                  onPress={() => {
                     router.push("/admin/account");
                   }}
                 >
@@ -269,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
                 className="text-danger w-80"
                 color="danger"
                 startContent={<i className="ri-logout-box-line text-xl"></i>}
-                onClick={() => {
+                onPress={() => {
                   handleSignOut();
                 }}
               >
@@ -356,7 +356,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
                 key="my-account"
                 className="w-60"
                 startContent={<i className="ri-account-box-line text-xl"></i>}
-                onClick={() => {
+                onPress={() => {
                   router.push("/admin/account");
                 }}
               >
@@ -387,7 +387,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
               className="text-danger w-60"
               color="danger"
               startContent={<i className="ri-logout-box-line text-xl"></i>}
-              onClick={() => {
+              onPress={() => {
                 handleSignOut();
               }}
             >
