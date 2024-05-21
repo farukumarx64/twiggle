@@ -102,7 +102,7 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
           className="w-20 h-20 text-3xl text-white bg-black mb-2"
           src={avatarUrl}
         />
-        <span className="text-black font-bold">
+        <span className="text-default-900 font-bold">
           {profileTitle || "@username"}
         </span>
         <span className="text-xs text-default-500">{bio || "your bio"}</span>
