@@ -29,23 +29,9 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
         if (error) {
           console.error("Error fetching user header:", error);
         } else {
-          const updatedContents = await Promise.all(
+          const fetchedContents = await Promise.all(
             data.map(async (content) => {
               let header = content.content;
-              if (content.isLink) {
-                try {
-                  const response = await axios.get(
-                    `/api/metadata?url=${encodeURIComponent(
-                      validateUrl(content.content)
-                    )}`
-                  );
-                  if (response.data.title) {
-                    header = response.data.title;
-                  }
-                } catch (error) {
-                  console.error("Error fetching metadata:", error);
-                }
-              }
               return {
                 header,
                 id: content.header_id,
@@ -54,7 +40,7 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
               };
             })
           );
-          setContents(updatedContents);
+          setContents(fetchedContents);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -113,7 +99,13 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
             item.link ? (
               <NextLink href={validateUrl(item.header)} target="_blank">
                 <Button radius="sm" size="lg" fullWidth color="secondary">
-                  <span className="flex overflow-auto flex-wrap">{item.header}</span>
+                  <span className="flex overflow-auto flex-wrap">
+                  {item.header ? (
+                      <AsyncHeaderTitle link={item.header} />
+                    ) : (
+                      "Loading..."
+                    )}
+                  </span>
                 </Button>
               </NextLink>
             ) : (
@@ -126,4 +118,38 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
       ))}
     </div>
   );
+};
+
+const AsyncHeaderTitle: React.FC<{ link: string }> = ({ link }) => {
+  const [title, setTitle] = useState<string>("");
+
+  useEffect(() => {
+    const fetchTitle = async () => {
+      const resolvedTitle = await headerTitle(link);
+      setTitle(resolvedTitle);
+    };
+
+    const headerTitle = async (link: string) => {
+      try {
+        const response = await axios.get(
+          `/api/metadata?url=${encodeURIComponent(validateUrl(link))}`
+        );
+        if (response.data.title) {
+          return response.data.title;
+        }
+      } catch (error) {
+        console.error("Error fetching metadata:", error);
+      }
+      return link;
+    };
+
+    fetchTitle();
+  }, [link]);
+
+  const validateUrl = (url: string) => {
+    const pattern = /^(https?:\/\/)/i;
+    return pattern.test(url) ? url : `http://${url}`;
+  };
+
+  return <>{title || link}</>;
 };
