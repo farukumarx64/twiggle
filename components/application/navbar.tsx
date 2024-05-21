@@ -100,6 +100,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
     setFeedbackContent(e.target.value);
   };
 
+  const handleShareButton = async() => {
+    await navigator.clipboard.writeText(`https://twgl.link/${username}`);
+  }
+
   return (
     <NextUINavbar maxWidth="xl" isBordered>
       <NavbarContent
@@ -181,6 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
             variant="ghost"
             startContent={<i className="ri-share-line"></i>}
             className="flex items-center gap-2"
+            onPress={handleShareButton}
           >
             <span className="font-bold">Share</span>
           </Button>
