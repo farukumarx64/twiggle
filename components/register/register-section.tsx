@@ -51,7 +51,7 @@ export const RegisterComponent: React.FC<{
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
-      value: e.target.value,
+      value: e.target.value.toLowerCase(),
       email: e.target.value !== "",
     }));
 
@@ -60,7 +60,7 @@ export const RegisterComponent: React.FC<{
         const { data, error } = await supabase
           .from("users")
           .select()
-          .eq("email", e.target.value); // Correct
+          .eq("email", e.target.value.toLowerCase()); // Correct
 
         if (data && data.length > 0) {
           setEmailExists(true);
@@ -77,7 +77,7 @@ export const RegisterComponent: React.FC<{
   ) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
-      username: e.target.value,
+      username: e.target.value.toLowerCase(),
     }));
 
     if (e.target.value.length > 2) {
@@ -85,7 +85,7 @@ export const RegisterComponent: React.FC<{
         const { data, error } = await supabase
           .from("users")
           .select()
-          .eq("username", e.target.value); // Correct
+          .eq("username", e.target.value.toLowerCase()); // Correct
 
         if (data && data.length > 0) {
           setUsernameExists(true);
