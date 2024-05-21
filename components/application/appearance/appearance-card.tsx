@@ -172,7 +172,7 @@ export const AppearanceCard: React.FC<AppearanceProps> = ({ userID }) => {
               color="secondary"
               radius="full"
               className="w-full"
-              onClick={() => {
+              onPress={() => {
                 const fileInput = document.getElementById("avatar-upload");
                 if (fileInput) {
                   fileInput.click();

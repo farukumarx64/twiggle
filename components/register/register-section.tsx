@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import NextLink from "next/link";
 import { useDispatch } from "react-redux";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { updateSignUpInfo } from "@/utils/state/actions/signUpActions";
 import { createClient } from "@/utils/supabase/components";
 
@@ -39,6 +39,37 @@ export const RegisterComponent: React.FC<{
   const [usernameExists, setUsernameExists] = useState(false);
   const isButtonDisabled = !state.email || !state.username;
 
+  useEffect(() => {
+    const getUsername = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get("username");
+      console.log(username);
+      if (username != null || username != undefined) {
+        if (username.length > 2) {
+          setState((prevInputs: any) => ({
+            ...prevInputs,
+            username: username?.toLowerCase(),
+          }));
+          try {
+            const { data, error } = await supabase
+              .from("users")
+              .select()
+              .eq("username", username.toLowerCase()); // Correct
+
+            if (data && data.length > 0) {
+              setUsernameExists(true);
+            } else {
+              setUsernameExists(false);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+    };
+    getUsername();
+  }, [setState, supabase]);
+
   const validateEmail = (value: string) =>
     value !== undefined
       ? value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)
@@ -51,25 +82,23 @@ export const RegisterComponent: React.FC<{
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
-      value: e.target.value,
+      value: e.target.value.toLowerCase(),
       email: e.target.value !== "",
     }));
 
-    if (!isInvalid) {
-      try {
-        const { data, error } = await supabase
-          .from("users")
-          .select()
-          .eq("email", e.target.value); // Correct
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select()
+        .eq("email", e.target.value.toLowerCase()); // Correct
 
-        if (data && data.length > 0) {
-          setEmailExists(true);
-        } else {
-          setEmailExists(false);
-        }
-      } catch (error) {
-        console.error(error);
+      if (data && data.length > 0) {
+        setEmailExists(true);
+      } else {
+        setEmailExists(false);
       }
+    } catch (error) {
+      console.error(error);
     }
   };
   const handleUsernameChange = async (
@@ -77,7 +106,7 @@ export const RegisterComponent: React.FC<{
   ) => {
     setState((prevInputs: any) => ({
       ...prevInputs,
-      username: e.target.value,
+      username: e.target.value.toLowerCase(),
     }));
 
     if (e.target.value.length > 2) {
@@ -85,7 +114,7 @@ export const RegisterComponent: React.FC<{
         const { data, error } = await supabase
           .from("users")
           .select()
-          .eq("username", e.target.value); // Correct
+          .eq("username", e.target.value.toLowerCase()); // Correct
 
         if (data && data.length > 0) {
           setUsernameExists(true);
@@ -148,7 +177,13 @@ export const RegisterComponent: React.FC<{
           value={state.username}
           isInvalid={isUsernameInvalid}
           color={
-            isInvalid ? "danger" : state.username === "" ? "default" : state.username.length > 2 ? "success" : "default"
+            isUsernameInvalid
+              ? "danger"
+              : state.username === ""
+              ? "default"
+              : state.username.length > 2
+              ? "success"
+              : "default"
           }
           errorMessage={isUsernameInvalid && "Username is already taken :("}
           startContent={
@@ -168,8 +203,12 @@ export const RegisterComponent: React.FC<{
         <Button
           radius="full"
           size="lg"
-          isDisabled={isButtonDisabled}
-          color={isButtonDisabled ? "default" : "secondary"}
+          isDisabled={isButtonDisabled || usernameExists || isInvalid}
+          color={
+            isButtonDisabled || usernameExists || isInvalid
+              ? "default"
+              : "secondary"
+          }
           fullWidth
           className=" box-content px-0 max-w-3xl md:max-w-xl"
           onPress={() => {

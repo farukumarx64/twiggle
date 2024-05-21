@@ -68,9 +68,9 @@ export const PersonalInfoComponent: React.FC<{
     setLoading(true);
     try {
       const response = await axios.post("/api/signup", {
-        email: user.email, // Add email parameter if required
+        email: user.email.toLowerCase(), // Add email parameter if required
         password: user.password, // Add password parameter if required
-        username: user.username,
+        username: user.username.toLowerCase(),
         fullname: user.fullname,
         category: user.category,
         subcategory: user.subcategory,
@@ -179,7 +179,7 @@ export const PersonalInfoComponent: React.FC<{
             }
             fullWidth
             className=" box-content px-0 max-w-3xl md:max-w-xl"
-            onClick={() => {
+            onPress={() => {
               handleContinue();
             }}
           >

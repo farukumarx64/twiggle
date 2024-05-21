@@ -46,7 +46,7 @@ export const SocialIcons: React.FC = () => {
       <span className="text-default-500 mt-2 mb-8">
         Add icons linking to your social profiles, email, and more
       </span>
-      <Button color="secondary" radius="full" onClick={onOpen}>
+      <Button color="secondary" radius="full" onPress={onOpen}>
         Add icon
       </Button>
 
@@ -65,7 +65,7 @@ export const SocialIcons: React.FC = () => {
                 <div className="w-full flex items-center justify-start">
                   <Button
                     variant="light"
-                    onClick={() => handleIconSectionChange("first")}
+                    onPress={() => handleIconSectionChange("first")}
                     isIconOnly
                     className="px-0 h-7 self-start"
                   >
@@ -100,7 +100,7 @@ export const SocialIcons: React.FC = () => {
                         className="h-14 px-4 py-7"
                         variant="light"
                         radius="sm"
-                        onClick={() => handleIconSectionChange("second", item)}
+                        onPress={() => handleIconSectionChange("second", item)}
                         endContent={
                           <i className="ri-arrow-right-s-line text-xl text-default-500"></i>
                         }
