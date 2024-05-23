@@ -119,7 +119,11 @@ export default function Settings() {
       <Head icon="logo-alt" title="Twiggle Admin" />
       <Navbar option="Settings" userID={userID} profileData={profileData} />
       <div className="flex">
-        <SettingSection userID={userID} />
+        <SettingSection
+          userID={userID}
+          content={content}
+          profileData={profileData}
+        />
         {isWideScreen && (
           <Preview content={content} profileData={profileData} />
         )}

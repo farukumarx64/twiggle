@@ -120,7 +120,11 @@ export default function Appearance() {
       <Head icon="logo-alt" title="Twiggle Admin" />
       <Navbar option="Appearance" userID={userID} profileData={profileData} />
       <div className="flex">
-        <AppearanceSection userID={userID} />
+        <AppearanceSection
+          userID={userID}
+          content={content}
+          profileData={profileData}
+        />
         {isWideScreen && (
           <Preview content={content} profileData={profileData} />
         )}
