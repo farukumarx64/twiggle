@@ -31,19 +31,21 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import router from "next/router";
 import { createClient } from "@/utils/supabase/components";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface NavbarProps {
   option: string;
   userID: string;
+  profileData: ProfileDataProps;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  option,
+  userID,
+  profileData,
+}) => {
   const { theme, setTheme } = useTheme();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [profileTitle, setProfileTitle] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [username, setUsername] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
   const [feedbackContent, setFeedbackContent] = useState("");
   const [feedbackSuccess, setFeedbackSuccess] = useState<any>(undefined);
   const [feedbackModalSize, setFeedbackModalSize] = useState<
@@ -60,31 +62,6 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
     | undefined
   >("lg");
   const supabase = createClient();
-
-  useEffect(() => {
-    // Fetch user data when the component mounts
-    const fetchUserData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("users")
-          .select()
-          .eq("user_id", userID); // Correct
-
-        if (data && data.length > 0) {
-          setProfileTitle(data[0].fullname || "");
-          setAvatar(data[0].profile_pic_url || "");
-          setUsername(data[0].username);
-          setAvatarUrl(
-            `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data[0].profile_pic_url}`
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [supabase, userID]);
 
   useEffect(() => {
     function updateFeedbackModal() {
@@ -215,7 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
             variant="flat"
             color="secondary"
             size="lg"
-            codeString={`https://twgl.link/${username}`}
+            codeString={`https://twgl.link/${profileData.username}`}
           >
             Share me
           </Snippet>
@@ -225,10 +202,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
             <DropdownTrigger>
               <Avatar
                 isBordered
-                name={profileTitle[0]?.toUpperCase() || "@"}
+                name={profileData.profileTitle[0]?.toUpperCase() || "@"}
                 as="button"
                 className="bg-black text-white"
-                src={avatarUrl}
+                src={profileData.avatarUrl}
               />
             </DropdownTrigger>
             <DropdownMenu
@@ -239,20 +216,20 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
               <DropdownItem isReadOnly key="user" className="w-80 opacity-100">
                 <User
                   name={`@${
-                    profileTitle.replace(/\b\w/g, (c: string) =>
+                    profileData.profileTitle.replace(/\b\w/g, (c: string) =>
                       c.toUpperCase()
                     ) ||
-                    profileTitle ||
+                    profileData.profileTitle ||
                     ""
                   }`}
-                  description={`twgl.link/${username}`}
+                  description={`twgl.link/${profileData.username}`}
                   classNames={{
                     name: "font-semibold mb-1 ml-2",
                     description: "text-default-500 ml-2",
                   }}
                   avatarProps={{
                     size: "md",
-                    src: avatarUrl,
+                    src: profileData.avatarUrl,
                     className: "bg-black text-white",
                   }}
                 />
@@ -336,7 +313,7 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
           variant="flat"
           size="lg"
           color="secondary"
-          codeString={`https://twgl.link/${username}`}
+          codeString={`https://twgl.link/${profileData.username}`}
         >
           Share me
         </Snippet>
@@ -344,10 +321,10 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
           <DropdownTrigger>
             <Avatar
               isBordered
-              name={profileTitle[0]?.toUpperCase() || "@"}
+              name={profileData.profileTitle[0]?.toUpperCase() || "@"}
               as="button"
               className="bg-black text-white"
-              src={avatarUrl}
+              src={profileData.avatarUrl}
             />
           </DropdownTrigger>
           <DropdownMenu
@@ -358,20 +335,20 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
             <DropdownItem isReadOnly key="user" className="w-60 opacity-100">
               <User
                 name={`@${
-                  profileTitle.replace(/\b\w/g, (c: string) =>
+                  profileData.profileTitle.replace(/\b\w/g, (c: string) =>
                     c.toUpperCase()
                   ) ||
-                  profileTitle ||
+                  profileData.profileTitle ||
                   ""
                 }`}
-                description={`twgl.link/${username}`}
+                description={`twgl.link/${profileData.username}`}
                 classNames={{
                   name: "font-semibold mb-1 ml-2",
                   description: "text-default-500 ml-2",
                 }}
                 avatarProps={{
                   size: "md",
-                  src: avatarUrl,
+                  src: profileData.avatarUrl,
                 }}
               />
             </DropdownItem>

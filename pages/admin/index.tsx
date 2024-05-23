@@ -13,6 +13,7 @@ export interface ProfileDataProps {
   avatar: string;
   profileTitle: string;
   avatarUrl: string;
+  username: string;
 }
 
 export default function AdminPage() {
@@ -23,6 +24,7 @@ export default function AdminPage() {
     avatar: "",
     avatarUrl: "",
     profileTitle: "",
+    username: "",
   });
   const [userID, setUserID] = useState("");
   const [content, setContent] = useState<HeaderCardProps[]>([]);
@@ -115,6 +117,7 @@ export default function AdminPage() {
             bio: data[0].bio || "",
             profileTitle: data[0].fullname,
             avatar: data[0].profile_pic_url,
+            username: data[0].username,
             avatarUrl:
               data[0].profile_pic_url === null
                 ? ""
@@ -132,7 +135,7 @@ export default function AdminPage() {
   return (
     <div>
       <Head icon="logo-alt" title="Twiggle Admin" />
-      <Navbar option="Links" userID={userID} />
+      <Navbar option="Links" userID={userID} profileData={profileData} />
       <div className="flex">
         <LinksSection
           userID={userID}

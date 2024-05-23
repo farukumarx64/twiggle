@@ -28,6 +28,7 @@ const UserPage: React.FC<UserPageProps> = ({ user, error }) => {
     avatar: "",
     avatarUrl: "",
     profileTitle: "",
+    username: "",
   });
   const [content, setContent] = useState<HeaderCardProps[]>([]);
   const { theme } = useTheme();
