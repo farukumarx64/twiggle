@@ -46,6 +46,19 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [feedbackContent, setFeedbackContent] = useState("");
   const [feedbackSuccess, setFeedbackSuccess] = useState<any>(undefined);
+  const [feedbackModalSize, setFeedbackModalSize] = useState<
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "full"
+    | "xs"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | undefined
+  >("lg");
   const supabase = createClient();
 
   useEffect(() => {
@@ -72,6 +85,27 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
 
     fetchUserData();
   }, [supabase, userID]);
+
+  useEffect(() => {
+    function updateFeedbackModal() {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 768) {
+        setFeedbackModalSize("lg");
+      } else {
+        setFeedbackModalSize("full");
+      }
+    }
+
+    // Update scale factor initially
+    updateFeedbackModal();
+
+    // Add event listener for resize to update scale factor when screen size changes
+    window.addEventListener("resize", updateFeedbackModal);
+    return () => {
+      window.removeEventListener("resize", updateFeedbackModal);
+    };
+  }, []); // empty dependency array ensures the effect runs only once after mount
+
   const handleSignOut = async () => {
     try {
       await axios.post("/api/signout");
@@ -394,7 +428,11 @@ export const Navbar: React.FC<NavbarProps> = ({ option, userID }) => {
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size={feedbackModalSize}
+      >
         <ModalContent>
           {(onClose) => (
             <>
