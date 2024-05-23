@@ -163,7 +163,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
 
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
-      <div className="flex flex-col w-full box-content px-4 justify-start items-center mt-72">
+      <div className="flex flex-col w-full box-content px-4 justify-start items-center mt-20">
         <Button
           startContent={<i className="ri-add-fill !text-xl"></i>}
           color="secondary"
