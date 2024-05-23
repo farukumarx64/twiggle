@@ -7,47 +7,16 @@ import axios from "axios";
 
 interface PreviewProps {
   userID: string;
+  content: HeaderCardProps[];
 }
 
-export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
+export const PreviewContent: React.FC<PreviewProps> = ({ userID, content }) => {
   const supabase = createClient();
 
-  const [contents, setContents] = useState<HeaderCardProps[]>([]);
   const [profileTitle, setProfileTitle] = useState("");
   const [bio, setBio] = useState("");
   const [avatar, setAvatar] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-
-  useEffect(() => {
-    const fetchPreviewData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("headers")
-          .select()
-          .eq("user_id", userID);
-
-        if (error) {
-          console.error("Error fetching user header:", error);
-        } else {
-          const fetchedContents = await Promise.all(
-            data.map(async (content) => {
-              let header = content.content;
-              return {
-                header,
-                id: content.header_id,
-                active: content.active,
-                link: content.isLink,
-              };
-            })
-          );
-          setContents(fetchedContents);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchPreviewData();
-  }, [supabase, userID]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -93,7 +62,7 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID }) => {
         </span>
         <span className="text-xs text-default-500">{bio || "your bio"}</span>
       </div>
-      {contents.map((item, index) => (
+      {content.map((item, index) => (
         <div key={item.id} className="my-2 w-full">
           {item.active ? (
             item.link ? (

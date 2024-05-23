@@ -9,9 +9,10 @@ import { PreviewContent } from "./content";
 
 interface PreviewProps {
   userID: string;
+  content: HeaderCardProps[];
 }
 
-export const Preview: React.FC<PreviewProps> = ({userID}) => {
+export const Preview: React.FC<PreviewProps> = ({ userID, content }) => {
   const [scaleFactor, setScaleFactor] = useState(100);
 
   useEffect(() => {
@@ -32,7 +33,6 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
     };
   }, []); // empty dependency array ensures the effect runs only once after mount
 
-
   const scaledStyle = {
     transform: `scale(${scaleFactor})`,
   };
@@ -43,7 +43,7 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
           className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
           style={scaledStyle}
         >
-           <style>
+          <style>
             {`
               ::-webkit-scrollbar-thumb {
                 background: transparent;
@@ -53,7 +53,7 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
               }
             `}
           </style>
-          <PreviewContent userID={userID} />
+          <PreviewContent userID={userID} content={content}/>
         </div>
       </section>
     </>
