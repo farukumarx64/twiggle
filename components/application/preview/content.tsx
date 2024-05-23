@@ -4,46 +4,17 @@ import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import { createClient } from "@/utils/supabase/components";
 import axios from "axios";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface PreviewProps {
-  userID: string;
   content: HeaderCardProps[];
+  profileData: ProfileDataProps;
 }
 
-export const PreviewContent: React.FC<PreviewProps> = ({ userID, content }) => {
-  const supabase = createClient();
-
-  const [profileTitle, setProfileTitle] = useState("");
-  const [bio, setBio] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("users")
-          .select()
-          .eq("user_id", userID);
-
-        if (data && data.length > 0) {
-          setBio(data[0].bio || "");
-          setProfileTitle(data[0].fullname || "");
-          setAvatar(data[0].profile_pic_url || "");
-          setAvatarUrl(
-            data[0].profile_pic_url === null
-              ? ""
-              : `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data[0].profile_pic_url}`
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [supabase, userID]);
-
+export const PreviewContent: React.FC<PreviewProps> = ({
+  content,
+  profileData,
+}) => {
   const validateUrl = (url: string) => {
     const pattern = /^(https?:\/\/)/i;
     return pattern.test(url) ? url : `http://${url}`;
@@ -53,14 +24,16 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID, content }) => {
     <div className="w-full">
       <div className="flex flex-col justify-center items-center w-full">
         <Avatar
-          name={profileTitle[0]?.toUpperCase() || "@"}
+          name={profileData.profileTitle[0]?.toUpperCase() || "@"}
           className="w-20 h-20 text-3xl text-white bg-black mb-2"
-          src={avatarUrl}
+          src={profileData.avatarUrl}
         />
         <span className="text-default-900 font-bold">
-          {profileTitle || "@username"}
+          {profileData.profileTitle || "@username"}
         </span>
-        <span className="text-xs text-default-500">{bio || "your bio"}</span>
+        <span className="text-xs text-default-500">
+          {profileData.bio || "your bio"}
+        </span>
       </div>
       {content.map((item, index) => (
         <div key={item.id} className="my-2 w-full">
@@ -69,7 +42,7 @@ export const PreviewContent: React.FC<PreviewProps> = ({ userID, content }) => {
               <NextLink href={validateUrl(item.header)} target="_blank">
                 <Button radius="sm" size="lg" fullWidth color="secondary">
                   <span className="flex overflow-auto flex-wrap">
-                  {item.header ? (
+                    {item.header ? (
                       <AsyncHeaderTitle link={item.header} />
                     ) : (
                       "Loading..."

@@ -8,10 +8,23 @@ import axios from "axios";
 import router from "next/router";
 import { useState, useEffect } from "react";
 
+export interface ProfileDataProps {
+  bio: string;
+  avatar: string;
+  profileTitle: string;
+  avatarUrl: string;
+}
+
 export default function AdminPage() {
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [userData, setUserData] = useState();
-  const [userID, setUserID] = useState('');
+  const [profileData, setProfileData] = useState<ProfileDataProps>({
+    bio: "",
+    avatar: "",
+    avatarUrl: "",
+    profileTitle: "",
+  });
+  const [userID, setUserID] = useState("");
   const [content, setContent] = useState<HeaderCardProps[]>([]);
   const supabase = createClient();
 
@@ -35,16 +48,16 @@ export default function AdminPage() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          setUserID(response.data.session.id)
+          setUserID(response.data.session.id);
           const { data, error } = await supabase
-          .from("users")
-          .select()
-          .eq("user_id", response.data.session.id);
-          
+            .from("users")
+            .select()
+            .eq("user_id", response.data.session.id);
+
           if (error) {
-            console.error("Error fetching user data in links navbar", error)
+            console.error("Error fetching user data in links navbar", error);
           } else {
-            setUserData(data?.[0])
+            setUserData(data?.[0]);
           }
         }
       } catch (error) {
@@ -63,7 +76,7 @@ export default function AdminPage() {
           .from("headers")
           .select()
           .eq("user_id", userID); // Correct
-          console.log("header data", data)
+        console.log("header data", data);
 
         if (error) {
           console.error("Error fetching user header:", error);
@@ -88,13 +101,48 @@ export default function AdminPage() {
     fetchHeaderData();
   }, [supabase, userID]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("user_id", userID);
+
+        if (data && data.length > 0) {
+          setProfileData((prevInputs: any) => ({
+            ...prevInputs,
+            bio: data[0].bio || "",
+            profileTitle: data[0].fullname,
+            avatar: data[0].profile_pic_url,
+            avatarUrl:
+              data[0].profile_pic_url === null
+                ? ""
+                : `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data[0].profile_pic_url}`,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [supabase, userID]);
+
   return (
     <div>
       <Head icon="logo-alt" title="Twiggle Admin" />
       <Navbar option="Links" userID={userID} />
       <div className="flex">
-        <LinksSection userID={userID} content={content} setContentState={setContent}/>
-        {isWideScreen && <Preview userID={userID} content={content} />}
+        <LinksSection
+          userID={userID}
+          content={content}
+          setContentState={setContent}
+          profileData={profileData}
+        />
+        {isWideScreen && (
+          <Preview content={content} profileData={profileData} />
+        )}
       </div>
     </div>
   );

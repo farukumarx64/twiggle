@@ -13,17 +13,20 @@ import { addUserHeader, addUserLink } from "@/utils/state/actions/userActions";
 import { RootState } from "@/utils/state/reducers/reducers";
 import { createClient } from "@/utils/supabase/components";
 import { PreviewMobile } from "../preview/mobile";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface LinksProps {
   userID: string;
   content: HeaderCardProps[];
   setContentState: React.Dispatch<React.SetStateAction<HeaderCardProps[]>>;
+  profileData: ProfileDataProps;
 }
 
 export const LinksSection: React.FC<LinksProps> = ({
   userID,
   content,
   setContentState,
+  profileData,
 }) => {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -215,7 +218,8 @@ export const LinksSection: React.FC<LinksProps> = ({
         <PreviewMobile
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          userID={userID}
+          content={content}
+          profileData={profileData}
         />
       </div>
     </div>

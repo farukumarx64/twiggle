@@ -1,18 +1,17 @@
-import { RootState } from "@/utils/state/reducers/reducers";
-import { Avatar, Button } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { HeaderCardProps } from "../links/links-card";
-import { createClient } from "@/utils/supabase/components";
-import NextLink from "next/link";
 import { PreviewContent } from "./content";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface PreviewProps {
-  userID: string;
   content: HeaderCardProps[];
+  profileData: ProfileDataProps;
 }
 
-export const Preview: React.FC<PreviewProps> = ({ userID, content }) => {
+export const Preview: React.FC<PreviewProps> = ({
+  content,
+  profileData,
+}) => {
   const [scaleFactor, setScaleFactor] = useState(100);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export const Preview: React.FC<PreviewProps> = ({ userID, content }) => {
               }
             `}
           </style>
-          <PreviewContent userID={userID} content={content}/>
+          <PreviewContent content={content} profileData={profileData} />
         </div>
       </section>
     </>
