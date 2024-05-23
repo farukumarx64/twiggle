@@ -1,17 +1,17 @@
-import { RootState } from "@/utils/state/reducers/reducers";
-import { Avatar, Button } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { HeaderCardProps } from "../links/links-card";
-import { createClient } from "@/utils/supabase/components";
-import NextLink from "next/link";
 import { PreviewContent } from "./content";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface PreviewProps {
-  userID: string;
+  content: HeaderCardProps[];
+  profileData: ProfileDataProps;
 }
 
-export const Preview: React.FC<PreviewProps> = ({userID}) => {
+export const Preview: React.FC<PreviewProps> = ({
+  content,
+  profileData,
+}) => {
   const [scaleFactor, setScaleFactor] = useState(100);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
     };
   }, []); // empty dependency array ensures the effect runs only once after mount
 
-
   const scaledStyle = {
     transform: `scale(${scaleFactor})`,
   };
@@ -43,7 +42,17 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
           className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
           style={scaledStyle}
         >
-          <PreviewContent userID={userID} />
+          <style>
+            {`
+              ::-webkit-scrollbar-thumb {
+                background: transparent;
+              }
+              ::-webkit-scrollbar {
+                width: 1px;
+              }
+            `}
+          </style>
+          <PreviewContent content={content} profileData={profileData} />
         </div>
       </section>
     </>

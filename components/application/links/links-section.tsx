@@ -13,49 +13,25 @@ import { addUserHeader, addUserLink } from "@/utils/state/actions/userActions";
 import { RootState } from "@/utils/state/reducers/reducers";
 import { createClient } from "@/utils/supabase/components";
 import { PreviewMobile } from "../preview/mobile";
+import { ProfileDataProps } from "@/pages/admin";
 
 interface LinksProps {
   userID: string;
+  content: HeaderCardProps[];
+  setContentState: React.Dispatch<React.SetStateAction<HeaderCardProps[]>>;
+  profileData: ProfileDataProps;
 }
 
-export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
-  const [contents, setContents] = useState<HeaderCardProps[]>([]);
+export const LinksSection: React.FC<LinksProps> = ({
+  userID,
+  content,
+  setContentState,
+  profileData,
+}) => {
   const dispatch = useDispatch();
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const user = useSelector((state: RootState) => state.user);
   const supabase = createClient();
-
-  useEffect(() => {
-    // Fetch user data when the component mounts
-    const fetchHeaderData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("headers")
-          .select()
-          .eq("user_id", userID); // Correct
-
-        if (error) {
-          console.error("Error fetching user header:", error);
-        } else {
-          data.forEach((content) => {
-            setContents((prevContents) => [
-              ...prevContents,
-              {
-                header: content.content,
-                id: content.header_id,
-                active: content.active,
-                link: content.isLink,
-              },
-            ]);
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchHeaderData();
-  }, [supabase, userID]);
 
   const handleAddHeader = () => {
     const id = v4();
@@ -65,22 +41,20 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       active: false,
       link: false,
     };
-    const newIndex = contents.length; // Index of the newly added header
-    setContents((prevContents) => [...prevContents, newHeader]);
+    const newIndex = content.length; // Index of the newly added header
+    setContentState((prevContents) => [...prevContents, newHeader]);
     dispatch(addUserHeader([...user.header, newHeader])); // Dispatch action to add header
     uploadHeader(id, newIndex, false);
   };
 
   const uploadHeader = async (id: string, index: number, isLink: boolean) => {
-    const { error } = await supabase
-      .from("headers")
-      .insert({
-        header_id: id,
-        user_id: userID,
-        content: "",
-        position: index,
-        isLink: isLink,
-      });
+    const { error } = await supabase.from("headers").insert({
+      header_id: id,
+      user_id: userID,
+      content: "",
+      position: index,
+      isLink: isLink,
+    });
     if (error) {
       console.error("Error uploading header", error);
     } else {
@@ -108,18 +82,18 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
       active: false,
       link: true,
     };
-    const newIndex = contents.length; // Index of the newly added header
-    setContents((prevContents) => [...prevContents, newLink]);
+    const newIndex = content.length; // Index of the newly added header
+    setContentState((prevContents) => [...prevContents, newLink]);
     dispatch(addUserLink([...user.header, newLink])); // Dispatch action to add link
     uploadHeader(id, newIndex, true);
   };
 
   const handleSort = (result: DropResult) => {
     if (!result.destination) return; // dropped outside the list
-    const items = Array.from(contents);
+    const items = Array.from(content);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    setContents(items);
+    setContentState(items);
 
     // Update position in state or send to backend
     const updatedPositions = items.map((item, index) => ({
@@ -147,14 +121,14 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
   };
 
   const handleDelete = (id: string) => {
-    setContents((prevContents) =>
+    setContentState((prevContents) =>
       prevContents.filter((item) => item.id !== id)
     );
     deleteHeader(id);
   };
 
   const handleHeaderCardStateChange = (updatedState: HeaderCardProps) => {
-    setContents((prevContents) =>
+    setContentState((prevContents) =>
       prevContents.map((item) =>
         item.id === updatedState.id ? { ...item, ...updatedState } : item
       )
@@ -163,7 +137,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
 
   return (
     <div className="flex gap-8 w-full md:w-2/3 box-content px-4 h-[93vh] justify-center">
-      <div className="flex flex-col w-full box-content px-4 justify-start items-center mt-72">
+      <div className="flex flex-col w-full box-content px-4 justify-start items-center mt-20">
         <Button
           startContent={<i className="ri-add-fill !text-xl"></i>}
           color="secondary"
@@ -197,7 +171,7 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
                     ref={provided.innerRef}
                     className="flex flex-col w-full box-content justify-start items-center"
                   >
-                    {contents.map((item, index) => (
+                    {content.map((item, index) => (
                       <Draggable
                         key={item.id}
                         draggableId={item.id}
@@ -241,7 +215,12 @@ export const LinksSection: React.FC<LinksProps> = ({ userID }) => {
         >
           <span className="font-bold">Preview</span>
         </Button>
-        <PreviewMobile isOpen={isOpen} onOpenChange={onOpenChange} userID={userID} />
+        <PreviewMobile
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          content={content}
+          profileData={profileData}
+        />
       </div>
     </div>
   );

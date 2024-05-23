@@ -5,10 +5,22 @@ import { Head } from "@/layouts/head";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import router from "next/router";
+import { ProfileDataProps } from ".";
+import { createClient } from "@/utils/supabase/components";
+import { HeaderCardProps } from "+/application/links/links-card";
 
 export default function Settings() {
   const [isWideScreen, setIsWideScreen] = useState(false);
-  const [userID, setUserID] = useState('');
+  const [profileData, setProfileData] = useState<ProfileDataProps>({
+    bio: "",
+    avatar: "",
+    avatarUrl: "",
+    profileTitle: "",
+    username: "",
+  });
+  const [content, setContent] = useState<HeaderCardProps[]>([]);
+  const [userID, setUserID] = useState("");
+  const supabase = createClient();
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,7 +42,7 @@ export default function Settings() {
         if (response.data.session === null) {
           router.push("/login");
         } else {
-          setUserID(response.data.session.id)
+          setUserID(response.data.session.id);
         }
       } catch (error) {
         console.error("Error checking login status:", error);
@@ -39,13 +51,82 @@ export default function Settings() {
 
     checkLoggedIn();
   }, []); // Run once when component mounts
+
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    const fetchHeaderData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("headers")
+          .select()
+          .eq("user_id", userID); // Correct
+        console.log("header data", data);
+
+        if (error) {
+          console.error("Error fetching user header:", error);
+        } else {
+          data.forEach((content) => {
+            setContent((prevContents) => [
+              ...prevContents,
+              {
+                header: content.content,
+                id: content.header_id,
+                active: content.active,
+                link: content.isLink,
+              },
+            ]);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchHeaderData();
+  }, [supabase, userID]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select()
+          .eq("user_id", userID);
+
+        if (data && data.length > 0) {
+          setProfileData((prevInputs: any) => ({
+            ...prevInputs,
+            bio: data[0].bio || "",
+            profileTitle: data[0].fullname,
+            avatar: data[0].profile_pic_url,
+            username: data[0].username,
+            avatarUrl:
+              data[0].profile_pic_url === null
+                ? ""
+                : `${process.env.NEXT_PUBLIC_SUPABASE_DB_URL}/storage/v1/object/public/${data[0].profile_pic_url}`,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [supabase, userID]);
+
   return (
     <>
       <Head icon="logo-alt" title="Twiggle Admin" />
-      <Navbar option="Settings" userID={userID} />
+      <Navbar option="Settings" userID={userID} profileData={profileData} />
       <div className="flex">
-        <SettingSection userID={userID}/>
-        {isWideScreen && <Preview userID={userID} />}
+        <SettingSection
+          userID={userID}
+          content={content}
+          profileData={profileData}
+        />
+        {isWideScreen && (
+          <Preview content={content} profileData={profileData} />
+        )}
       </div>
     </>
   );

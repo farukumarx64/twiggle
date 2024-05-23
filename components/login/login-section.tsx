@@ -27,7 +27,7 @@ export const LoginComponent: React.FC<{
   const dispatch = useDispatch();
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [loginSuccess, setLoginSuccess] = useState<any>(undefined);
   const user = useSelector((state: RootState) => state.login);
   const router = useRouter();
@@ -82,16 +82,16 @@ export const LoginComponent: React.FC<{
       const { data, error } = await supabase
         .from("users")
         .select()
-        .eq("username", user.username); // Correct
+        .eq("username", user.username.toLowerCase()); // Correct
       if (error) {
         console.error(error);
-      } else {
+      } else if (data && data.length > 0) {
         try {
           const response = await axios.post("/api/login", {
             email: data[0].email, // Add email parameter
             password: user.password, // Add password parameter
           });
-    
+
           // Handle success response
           router.push("/admin");
         } catch (error: any) {
@@ -101,6 +101,9 @@ export const LoginComponent: React.FC<{
         } finally {
           setLoading(false);
         }
+      } else {
+        setLoginSuccess("Username does not exist");
+        setLoading(false);
       }
     } else {
       try {
@@ -108,7 +111,7 @@ export const LoginComponent: React.FC<{
           email: user.username, // Add email parameter
           password: user.password, // Add password parameter
         });
-  
+
         // Handle success response
         router.push("/admin");
       } catch (error: any) {
@@ -118,9 +121,9 @@ export const LoginComponent: React.FC<{
       } finally {
         setLoading(false);
       }
-    };
     }
-    
+  };
+
   const handleOAuth = async (provider: string) => {
     setLoading(true);
     try {
