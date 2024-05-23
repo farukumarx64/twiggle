@@ -43,6 +43,16 @@ export const Preview: React.FC<PreviewProps> = ({userID}) => {
           className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
           style={scaledStyle}
         >
+           <style>
+            {`
+              ::-webkit-scrollbar-thumb {
+                background: transparent;
+              }
+              ::-webkit-scrollbar {
+                width: 1px;
+              }
+            `}
+          </style>
           <PreviewContent userID={userID} />
         </div>
       </section>
