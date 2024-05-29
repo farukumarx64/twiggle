@@ -51,14 +51,14 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <NextLink href="/login" target="_blank">
+          <NextLink href="/login">
             <Button radius="sm" size="lg">
               Log in
             </Button>
           </NextLink>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex gap-2">
-          <NextLink href="/register" target="_blank">
+          <NextLink href="/register">
             <Button color="secondary" radius="full" size="lg">
               Sign up free
             </Button>
