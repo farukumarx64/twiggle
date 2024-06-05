@@ -39,7 +39,7 @@ export const Preview: React.FC<PreviewProps> = ({
     <>
       <section className="hidden md:flex w-1/3 h-[80vh] justify-center items-start mt-20">
         <div
-          className="border-[15px] border-slate-800 w-[296px] h-[610px] bg-white px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
+          className="border-[15px] border-slate-800 w-[296px] h-[610px] px-4 pt-16 pb-8 rounded-[50px] flex flex-col items-center overflow-y-scroll"
           style={scaledStyle}
         >
           <style>
