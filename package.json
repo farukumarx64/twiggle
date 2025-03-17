@@ -22,7 +22,7 @@
     "@vercel/speed-insights": "^1.0.5",
     "audit": "^0.0.6",
     "autoprefixer": "10.4.15",
-    "axios": "^1.6.8",
+    "axios": "^1.8.3",
     "clsx": "^2.0.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
